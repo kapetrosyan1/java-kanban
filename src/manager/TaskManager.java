@@ -11,7 +11,7 @@ public class TaskManager {
     private HashMap<Integer, Subtask> subtasks = new HashMap<>();
 
     public void addTask(Task task) {
-        if(task != null) {
+        if (task != null) {
             task.setId(nextId);
             nextId++;
             tasks.put(task.getId(), task);
@@ -24,8 +24,9 @@ public class TaskManager {
             tasks.put(task.getId(), task);
         }
     }
+
     public void addEpic(Epic epic) {
-        if(epic != null) {
+        if (epic != null) {
             epic.setId(nextId);
             nextId++;
             epics.put(epic.getId(), epic);
@@ -33,7 +34,7 @@ public class TaskManager {
     }
 
     public void addSubtask(Subtask subtask, Epic epic) {
-        if(subtask != null && epic != null) {
+        if (subtask != null && epic != null) {
             subtask.setId(nextId);
             nextId++;
             subtask.setEpicId(epic.getId());
@@ -53,31 +54,33 @@ public class TaskManager {
 
 
     public boolean isNew(@NotNull Epic epic) {
-            if (epic.getSubtasksId() == null) {
-                return true;
-            }
-            for (int id : epic.getSubtasksId()) {
-                if (!(subtasks.get(id).getStatus().equals("New"))) {
-                    return false;
-                }
-            }
+        if (epic.getSubtasksId() == null) {
             return true;
+        }
+        for (int id : epic.getSubtasksId()) {
+            if (!(subtasks.get(id).getStatus().equals("New"))) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public boolean isDone(@NotNull Epic epic) {
-            for (int id : epic.getSubtasksId()) {
-                if (!(Objects.equals(subtasks.get(id).getStatus(), "Done"))) {
-                    return false;
-                }
+        for (int id : epic.getSubtasksId()) {
+            if (!(Objects.equals(subtasks.get(id).getStatus(), "Done"))) {
+                return false;
             }
+        }
         return true;
     }
 
     public void updateEpic(Epic epic) {
-        if(epic != null) {
-            for (int id: subtasks.keySet()) {
-                if(subtasks.get(id).getEpicId() == epic.getId()) {
-                    epic.addSubtaskId(id);
+        if (isNotNull(epic)) {
+            if (isNotNull(subtasks)) {
+                for (int id : subtasks.keySet()) {
+                    if (subtasks.get(id).getEpicId() == epic.getId()) {
+                        epic.addSubtaskId(id);
+                    }
                 }
             }
             if (isNew(epic)) {
@@ -93,58 +96,83 @@ public class TaskManager {
 
         }
     }
+
     public void printAllTasks() {
-        if(tasks != null) {
+        if (isNotNull(tasks)) {
             for (Task task : tasks.values()) {
                 System.out.println(task);
             }
         }
     }
+
     public void printAllEpics() {
-        if(epics != null) {
-        for (Epic epic: epics.values()) {
-            System.out.println(epic);
-            if(subtasks != null) {
-            for (Subtask subtask : subtasks.values()) {
-                if (subtask.getEpicId() == epic.getId()) {
-                    System.out.println(subtask);
-                }
+        if (isNotNull(epics)) {
+            for (Epic epic : epics.values()) {
+                System.out.println(epic);
+                if (isNotNull(subtasks)) {
+                    for (Subtask subtask : subtasks.values()) {
+                        if (subtask.getEpicId() == epic.getId()) {
+                            System.out.println(subtask);
+                        }
+                    }
                 }
             }
         }
-        }
     }
+
     public void getById(int taskId) {
-        if(tasks.containsKey(taskId)) {
-            System.out.println(tasks.get(taskId));
-        } else if (epics.containsKey(taskId)) {
-            System.out.println(epics.get(taskId));
-        } else if (subtasks.containsKey(taskId)) {
-            System.out.println(subtasks.get(taskId));
-        }
-    }
-    public void removeById (int taskId) {
-        if(tasks.containsKey(taskId)) {
-            tasks.remove(taskId);
-            return;
-        } else if (epics.containsKey(taskId)) {
-            epics.remove(taskId);
-            for (int id : subtasks.keySet()) {
-                if(subtasks.get(id).getEpicId() == taskId) {
-                    subtasks.remove(id);
-                }
-                return;
+        if(isNotNull(tasks)) {
+            if (tasks.containsKey(taskId)) {
+                System.out.println(tasks.get(taskId));
             }
-        } else if (subtasks.containsKey(taskId)) {
-            subtasks.remove(taskId);
-        } else {
-            System.out.println("Такой задачи нет");
+        }
+        if(isNotNull(epics)) {
+            if (epics.containsKey(taskId)) {
+                System.out.println(epics.get(taskId));
+            }
+        }
+        if(isNotNull(subtasks)) {
+            if (subtasks.containsKey(taskId)) {
+                System.out.println(subtasks.get(taskId));
+            }
         }
     }
+
+    public void removeById(int taskId) {
+        if(isNotNull(tasks)) {
+            for (Task task : tasks.values()) {
+                if(task.getId() == taskId) {
+                    tasks.remove(task.getId());
+                    return;
+                }
+            }
+        }
+        if(isNotNull(epics)) {
+            for (Epic epic : epics.values()) {
+                if(epic.getId() == taskId) {
+                    epics.remove(epic.getId());
+                    return;
+                        }
+                    }
+
+                }
+        if(isNotNull(subtasks)) {
+            for (Subtask subtask : subtasks.values()) {
+                if (subtask.getId() == taskId) {
+                    subtasks.remove(subtask.getId());
+                    return;
+                }
+            }
+        }
+    }
+
     public void removeAll() {
         tasks = null;
         epics = null;
         subtasks = null;
+    }
+    public boolean isNotNull(Object object) {
+        return object != null;
     }
 }
 

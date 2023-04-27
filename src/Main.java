@@ -36,5 +36,6 @@ public class Main {
         manager.removeAll();
         manager.printAllEpics();
         manager.printAllTasks();
+        manager.getById(4);
     }
 }
