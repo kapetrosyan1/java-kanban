@@ -30,7 +30,7 @@ public class Main {
         Task updateTask1 = new Task("Лекарства", "Выпить кларитин", "Done");
         Subtask updateSubtask3 = new Subtask("1.", "Прочитать Руслан и Людмила", "Done");
         manager.updateTask(updateTask1, task1);
-        manager.updateSubtask(updateSubtask3, subtask3);
+        manager.updateSubtask(updateSubtask3, null);
         manager.printAllTasks();
         manager.printAllEpics();
         manager.removeAll();

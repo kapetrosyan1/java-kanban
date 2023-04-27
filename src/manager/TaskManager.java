@@ -11,7 +11,7 @@ public class TaskManager {
     private HashMap<Integer, Subtask> subtasks = new HashMap<>();
 
     public void addTask(Task task) {
-        if (task != null) {
+        if (isNotNull(task)) {
             task.setId(nextId);
             nextId++;
             tasks.put(task.getId(), task);
@@ -19,14 +19,14 @@ public class TaskManager {
     }
 
     public void updateTask(Task task, Task oldTask) {
-        if (task != null && oldTask != null) {
+        if (isNotNull(task) && isNotNull(oldTask)) {
             task.setId(oldTask.getId());
             tasks.put(task.getId(), task);
         }
     }
 
     public void addEpic(Epic epic) {
-        if (epic != null) {
+        if (isNotNull(epic)) {
             epic.setId(nextId);
             nextId++;
             epics.put(epic.getId(), epic);
@@ -34,7 +34,7 @@ public class TaskManager {
     }
 
     public void addSubtask(Subtask subtask, Epic epic) {
-        if (subtask != null && epic != null) {
+        if (isNotNull(subtask) && isNotNull(epic)) {
             subtask.setId(nextId);
             nextId++;
             subtask.setEpicId(epic.getId());
@@ -44,7 +44,7 @@ public class TaskManager {
     }
 
     public void updateSubtask(Subtask subtask, Subtask oldSubtask) {
-        if (subtask != null && oldSubtask != null) {
+        if (isNotNull(subtask) && isNotNull(oldSubtask)) {
             subtask.setId(oldSubtask.getId());
             subtask.setEpicId(oldSubtask.getEpicId());
             subtasks.put(subtask.getId(), subtask);
