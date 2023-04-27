@@ -33,5 +33,8 @@ public class Main {
         manager.updateSubtask(updateSubtask3, subtask3);
         manager.printAllTasks();
         manager.printAllEpics();
+        manager.removeAll();
+        manager.printAllEpics();
+        manager.printAllTasks();
     }
 }

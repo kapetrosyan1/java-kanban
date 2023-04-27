@@ -94,18 +94,24 @@ public class TaskManager {
         }
     }
     public void printAllTasks() {
-        for (Task task : tasks.values()) {
-            System.out.println(task);
+        if(tasks != null) {
+            for (Task task : tasks.values()) {
+                System.out.println(task);
+            }
         }
     }
     public void printAllEpics() {
+        if(epics != null) {
         for (Epic epic: epics.values()) {
             System.out.println(epic);
+            if(subtasks != null) {
             for (Subtask subtask : subtasks.values()) {
                 if (subtask.getEpicId() == epic.getId()) {
                     System.out.println(subtask);
                 }
+                }
             }
+        }
         }
     }
     public void getById(int taskId) {
