@@ -32,7 +32,7 @@ public class Main {
         manager.updateSubtask(updateSubtask3, subtask3);
         manager.removeTaskById(1);
         System.out.println(manager.getAllTasks());
-        manager.removeAll();
+        manager.removeAllEpics();
         System.out.println(manager.getAllEpics());
         manager.getEpicById(3);
     }

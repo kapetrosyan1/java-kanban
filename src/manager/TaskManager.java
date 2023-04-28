@@ -201,9 +201,15 @@ public class TaskManager {
         }
     }
 
-    public void removeAll() {
+    public void removeAllTasks() {
         tasks = null;
+    }
+
+    public void removeAllEpics() {
         epics = null;
+    }
+
+    public void removeAllSubtasks() {
         subtasks = null;
     }
 
