@@ -52,6 +52,7 @@ public class TaskManager {
             updateEpic(epics.get(subtask.getEpicId()));
         }
     }
+
     public boolean isNew(@NotNull Epic epic) {
         if (epic.getSubtasksId() == null) {
             return true;
@@ -139,6 +140,7 @@ public class TaskManager {
        }
        return epicsSubtasks;
    }
+
     public Task getTaskById(int taskId) {
         if (isNotNull(tasks)) {
             if (tasks.containsKey(taskId)) {
@@ -165,7 +167,6 @@ public class TaskManager {
         }
         return null;
     }
-
 
     public void removeTaskById(int taskId) {
         if (isNotNull(tasks)) {
