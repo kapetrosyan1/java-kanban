@@ -52,8 +52,6 @@ public class TaskManager {
             updateEpic(epics.get(subtask.getEpicId()));
         }
     }
-
-
     public boolean isNew(@NotNull Epic epic) {
         if (epic.getSubtasksId() == null) {
             return true;
@@ -98,76 +96,100 @@ public class TaskManager {
         }
     }
 
-    public void printAllTasks() {
+   public ArrayList<Task> getAllTasks() {
+       ArrayList<Task> allTasks = new ArrayList<>();
+
+       if (!isNotNull(tasks)) return null;
+       for (Task task : tasks.values()) {
+           allTasks.add(task);
+       }
+       return allTasks;
+   }
+
+   public ArrayList<Epic> getAllEpics() {
+       ArrayList<Epic> allEpics = new ArrayList<>();
+
+       if (!isNotNull(epics)) return null;
+       for (Epic epic : epics.values()) {
+           allEpics.add(epic);
+       }
+       return allEpics;
+   }
+
+   public ArrayList<Subtask> getAllSubtasks() {
+       if (!isNotNull(subtasks)) return null;
+
+       ArrayList<Subtask> allSubtasks = new ArrayList<>();
+
+       for (Subtask subtask : subtasks.values()) {
+           allSubtasks.add(subtask);
+       }
+       return allSubtasks;
+   }
+
+   public ArrayList<Subtask> getAllEpicsSubtasks(Epic epic) {
+       if (!isNotNull(epic) && !isNotNull(subtasks)) return null;
+
+       ArrayList<Subtask> epicsSubtasks = new ArrayList<>();
+
+       for (Subtask subtask : subtasks.values()) {
+           if (subtask.getEpicId() == epic.getId()) {
+               epicsSubtasks.add(subtask);
+           }
+       }
+       return epicsSubtasks;
+   }
+    public Task getTaskById(int taskId) {
+        if (isNotNull(tasks)) {
+            if (tasks.containsKey(taskId)) {
+                return tasks.get(taskId);
+            }
+        }
+        return null;
+    }
+
+    public Epic getEpicById(int taskId) {
+        if (isNotNull(epics)) {
+            if (epics.containsKey(taskId)) {
+                return epics.get(taskId);
+            }
+        }
+        return null;
+    }
+
+    public Subtask getSubtaskById(int taskId) {
+        if (isNotNull(subtasks)) {
+            if (subtasks.containsKey(taskId)) {
+                return subtasks.get(taskId);
+            }
+        }
+        return null;
+    }
+
+
+    public void removeTaskById(int taskId) {
         if (isNotNull(tasks)) {
             for (Task task : tasks.values()) {
-                System.out.println(task);
-            }
-        }
-    }
-
-    public void printAllEpics() {
-        if (isNotNull(epics)) {
-            for (Epic epic : epics.values()) {
-                System.out.println(epic);
-                if (isNotNull(subtasks)) {
-                    for (Subtask subtask : subtasks.values()) {
-                        if (subtask.getEpicId() == epic.getId()) {
-                            System.out.println(subtask);
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    public void getById(int taskId) {
-        if(isNotNull(tasks)) {
-            if (tasks.containsKey(taskId)) {
-                System.out.println(tasks.get(taskId));
-            }
-        }
-        if(isNotNull(epics)) {
-            if (epics.containsKey(taskId)) {
-                System.out.println(epics.get(taskId));
-            }
-        }
-        if(isNotNull(subtasks)) {
-            if (subtasks.containsKey(taskId)) {
-                System.out.println(subtasks.get(taskId));
-            }
-        }
-    }
-
-    public void removeById(int taskId) {
-        if(isNotNull(tasks)) {
-            for (Task task : tasks.values()) {
-                if(task.getId() == taskId) {
+                if (task.getId() == taskId) {
                     tasks.remove(task.getId());
                     return;
                 }
             }
         }
-        if(isNotNull(epics)) {
+    }
+
+    public void removeEpicById(int taskId) {
+        if (isNotNull(epics)) {
             for (Epic epic : epics.values()) {
                 if (epic.getId() == taskId) {
                     epics.remove(epic.getId());
-                    if (isNotNull(subtasks)) {
-                        ArrayList<Integer> subtasksToDelete = new ArrayList<>();
-
-                        for (Subtask subtask : subtasks.values()) {
-                            if (subtask.getEpicId() == taskId) {
-                                subtasksToDelete.add(subtask.getId());
-                            }
-                        }
-                        for (int subId : subtasksToDelete) {
-                            subtasks.remove(subId);
-                        }
-                        return;
-                    }
+                    return;
                 }
             }
         }
+    }
+
+    public void removeSubtaskById(int taskId) {
         if(isNotNull(subtasks)) {
             for (Subtask subtask : subtasks.values()) {
                 if (subtask.getId() == taskId) {
@@ -183,6 +205,7 @@ public class TaskManager {
         epics = null;
         subtasks = null;
     }
+
     public boolean isNotNull(Object object) {
         return object != null;
     }

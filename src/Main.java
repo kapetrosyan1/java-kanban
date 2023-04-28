@@ -23,19 +23,17 @@ public class Main {
         Subtask subtask3 = new Subtask("1.", "Прочитать Войну и Мир", "In Progress");
         manager.addEpic(epic2);
         manager.addSubtask(subtask3, epic2);
-        manager.printAllTasks();
-        manager.printAllEpics();
-        manager.removeById(2);
-        manager.removeById(3);
+        System.out.println(manager.getAllTasks());
+        System.out.println(manager.getAllEpics());
+        System.out.println(manager.getAllSubtasks());
         Task updateTask1 = new Task("Лекарства", "Выпить кларитин", "Done");
         Subtask updateSubtask3 = new Subtask("1.", "Прочитать Руслан и Людмила", "Done");
         manager.updateTask(updateTask1, task1);
         manager.updateSubtask(updateSubtask3, subtask3);
-        manager.printAllTasks();
-        manager.printAllEpics();
+        manager.removeTaskById(1);
+        System.out.println(manager.getAllTasks());
         manager.removeAll();
-        manager.printAllEpics();
-        manager.printAllTasks();
-        manager.getById(4);
+        System.out.println(manager.getAllEpics());
+        manager.getEpicById(3);
     }
 }

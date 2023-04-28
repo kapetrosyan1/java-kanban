@@ -1,7 +1,6 @@
 package tasks;
 import java.util.ArrayList;
 
-
 public class Epic extends Task {
     private ArrayList<Integer> subtasksId = new ArrayList<>();
 
@@ -9,14 +8,12 @@ public class Epic extends Task {
         super(title, description, "New");
     }
     public void addSubtaskId(int idNumber) {
-
         if (!(subtasksId.contains(idNumber))) {
             subtasksId.add(idNumber);
         }
     }
 
     public ArrayList<Integer> getSubtasksId() {
-
         return subtasksId;
     }
     @Override
