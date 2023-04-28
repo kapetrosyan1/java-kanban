@@ -1,6 +1,7 @@
 package manager;
 import org.jetbrains.annotations.NotNull;
 import tasks.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
 
@@ -149,13 +150,24 @@ public class TaskManager {
         }
         if(isNotNull(epics)) {
             for (Epic epic : epics.values()) {
-                if(epic.getId() == taskId) {
+                if (epic.getId() == taskId) {
                     epics.remove(epic.getId());
-                    return;
-                        }
-                    }
+                    if (isNotNull(subtasks)) {
+                        ArrayList<Integer> subtasksToDelete = new ArrayList<>();
 
+                        for (Subtask subtask : subtasks.values()) {
+                            if (subtask.getEpicId() == taskId) {
+                                subtasksToDelete.add(subtask.getId());
+                            }
+                        }
+                        for (int subId : subtasksToDelete) {
+                            subtasks.remove(subId);
+                        }
+                        return;
+                    }
                 }
+            }
+        }
         if(isNotNull(subtasks)) {
             for (Subtask subtask : subtasks.values()) {
                 if (subtask.getId() == taskId) {
