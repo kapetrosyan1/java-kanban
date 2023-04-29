@@ -118,7 +118,7 @@ public class TaskManager {
    }
 
    public ArrayList<Subtask> getAllSubtasks() {
-       if (!isNotNull(subtasks)) return null;
+       if (!isNotNull(subtasks)) return new ArrayList<>();
 
        ArrayList<Subtask> allSubtasks = new ArrayList<>();
 
@@ -129,7 +129,7 @@ public class TaskManager {
    }
 
    public ArrayList<Subtask> getAllEpicsSubtasks(Epic epic) {
-       if (!isNotNull(epic) && !isNotNull(subtasks)) return null;
+       if (!isNotNull(epic) && !isNotNull(subtasks)) return new ArrayList<>();
 
        ArrayList<Subtask> epicsSubtasks = new ArrayList<>();
 
