@@ -129,7 +129,7 @@ public class TaskManager {
    }
 
    public ArrayList<Subtask> getAllEpicsSubtasks(Epic epic) {
-       if (!isNotNull(epic) && !isNotNull(subtasks)) return null;
+       if (!isNotNull(epic) && !isNotNull(subtasks) || epic.isSubtasksEmpty()) return null;
 
        ArrayList<Subtask> epicsSubtasks = new ArrayList<>();
 
@@ -142,7 +142,7 @@ public class TaskManager {
    }
 
     public Task getTaskById(int taskId) {
-        if (isNotNull(tasks)) {
+        if (isNotNull(tasks) && tasks.containsKey(taskId)) {
             if (tasks.containsKey(taskId)) {
                 return tasks.get(taskId);
             }
@@ -151,7 +151,7 @@ public class TaskManager {
     }
 
     public Epic getEpicById(int taskId) {
-        if (isNotNull(epics)) {
+        if (isNotNull(epics) && epics.containsKey(taskId)) {
             if (epics.containsKey(taskId)) {
                 return epics.get(taskId);
             }
@@ -160,7 +160,7 @@ public class TaskManager {
     }
 
     public Subtask getSubtaskById(int taskId) {
-        if (isNotNull(subtasks)) {
+        if (isNotNull(subtasks) && subtasks.containsKey(taskId)) {
             if (subtasks.containsKey(taskId)) {
                 return subtasks.get(taskId);
             }
@@ -169,7 +169,7 @@ public class TaskManager {
     }
 
     public void removeTaskById(int taskId) {
-        if (isNotNull(tasks)) {
+        if (isNotNull(tasks) && tasks.containsKey(taskId)) {
             for (Task task : tasks.values()) {
                 if (task.getId() == taskId) {
                     tasks.remove(task.getId());
@@ -180,7 +180,7 @@ public class TaskManager {
     }
 
     public void removeEpicById(int taskId) {
-        if (isNotNull(epics)) {
+        if (isNotNull(epics) && epics.containsKey(taskId)) {
             for (Epic epic : epics.values()) {
                 if (epic.getId() == taskId) {
                     epics.remove(epic.getId());
@@ -191,10 +191,15 @@ public class TaskManager {
     }
 
     public void removeSubtaskById(int taskId) {
-        if(isNotNull(subtasks)) {
+        if(isNotNull(subtasks) && subtasks.containsKey(taskId)) {
             for (Subtask subtask : subtasks.values()) {
                 if (subtask.getId() == taskId) {
-                    subtasks.remove(subtask.getId());
+
+                    Epic subtasksEpic = epics.get(subtask.getEpicId());
+
+                    subtasksEpic.removeSubtaskId(taskId);
+                    subtasks.remove(taskId);
+                    updateEpic(subtasksEpic);
                     return;
                 }
             }
@@ -210,7 +215,14 @@ public class TaskManager {
     }
 
     public void removeAllSubtasks() {
+
         subtasks = null;
+        if (isNotNull(epics)) {
+            for (Epic epic : epics.values()) {
+                epic.clearSubtasksId();
+                updateEpic(epic);
+            }
+        }
     }
 
     public boolean isNotNull(Object object) {
