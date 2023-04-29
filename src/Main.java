@@ -23,16 +23,33 @@ public class Main {
         Subtask subtask3 = new Subtask("1.", "Прочитать Войну и Мир", "In Progress");
         manager.addEpic(epic2);
         manager.addSubtask(subtask3, epic2);
+
         System.out.println(manager.getAllTasks());
         System.out.println(manager.getAllEpics());
         System.out.println(manager.getAllSubtasks());
-        Task updateTask1 = new Task("Лекарства", "Выпить кларитин", "Done");
-        Subtask updateSubtask3 = new Subtask("1.", "Прочитать Руслан и Людмила", "Done");
-        manager.updateTask(updateTask1, task1);
-        manager.updateSubtask(updateSubtask3, subtask3);
-        manager.removeAllEpics();
-        manager.removeAllSubtasks();
         System.out.println(manager.getAllEpicsSubtasks(epic2));
 
+        Task newTask = new Task("Др", "Купить алкоголь", "Done");
+        Task newTask1 = new Task("Лекарства", "Выпить ново-пассит", "In Progress");
+        Subtask newSubtask = new Subtask("1.", "Купить гречку", "Done");
+        Subtask newSubtask3 = new Subtask("1.", "Прочитать Войну и Мир", "Done");
+
+        manager.updateTask(newTask,  task);
+        manager.updateTask(newTask1, task1);
+        manager.updateSubtask(newSubtask, subtask);
+        manager.updateSubtask(newSubtask3, subtask3);
+
+        System.out.println(manager.getAllTasks());
+        System.out.println(manager.getAllEpics());
+        System.out.println(manager.getAllSubtasks());
+        System.out.println(manager.getAllEpicsSubtasks(epic2));
+
+        manager.removeTaskById(1);
+        manager.removeEpicById(6);
+
+        System.out.println(manager.getAllTasks());
+        System.out.println(manager.getAllEpics());
+        System.out.println(manager.getAllSubtasks());
+        System.out.println(manager.getAllEpicsSubtasks(epic2));
     }
 }

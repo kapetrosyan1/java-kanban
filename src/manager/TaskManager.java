@@ -98,9 +98,10 @@ public class TaskManager {
     }
 
    public ArrayList<Task> getAllTasks() {
+       if (!isNotNull(tasks)) return new ArrayList<>();
+
        ArrayList<Task> allTasks = new ArrayList<>();
 
-       if (!isNotNull(tasks)) return null;
        for (Task task : tasks.values()) {
            allTasks.add(task);
        }
@@ -108,9 +109,10 @@ public class TaskManager {
    }
 
    public ArrayList<Epic> getAllEpics() {
+       if (!isNotNull(epics)) return new ArrayList<>();
+
        ArrayList<Epic> allEpics = new ArrayList<>();
 
-       if (!isNotNull(epics)) return null;
        for (Epic epic : epics.values()) {
            allEpics.add(epic);
        }
