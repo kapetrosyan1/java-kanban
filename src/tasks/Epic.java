@@ -23,10 +23,6 @@ public class Epic extends Task {
         subtasksId.clear();
     }
 
-    public boolean isSubtasksEmpty() {
-        return subtasksId.isEmpty();
-    }
-
     public ArrayList<Integer> getSubtasksId() {
         return subtasksId;
     }

@@ -30,7 +30,8 @@ public class Main {
         Subtask updateSubtask3 = new Subtask("1.", "Прочитать Руслан и Людмила", "Done");
         manager.updateTask(updateTask1, task1);
         manager.updateSubtask(updateSubtask3, subtask3);
-        manager.removeAllEpics();
+        manager.removeAllSubtasks();
+        System.out.println(manager.getAllEpicsSubtasks(epic2));
         manager.removeTaskById(1);
         System.out.println(manager.getAllTasks());
         System.out.println(manager.getAllEpicsSubtasks(epic2));
