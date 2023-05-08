@@ -33,6 +33,8 @@ public class Main {
         manager.addSubtask(subtask3, epic2);
         manager.getSubtaskById(4);
         manager.getSubtaskById(5);
+        manager.getEpicById(6);
+        manager.getSubtaskById(7);
 
         System.out.println(historyManager.getHistory());
 

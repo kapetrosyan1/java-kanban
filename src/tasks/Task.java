@@ -40,7 +40,8 @@ public class Task {
     public String toString() {
        return "{Task  - " + title
                + ", Description - " + description
-               + ", Task Status - " + status + "};";
+               + ", Task Status - " + status
+               + "};";
     }
 
 }
