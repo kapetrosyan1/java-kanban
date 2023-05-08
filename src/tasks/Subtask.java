@@ -3,7 +3,7 @@ package tasks;
 public class Subtask extends Task {
     private int epicId;
 
-    public Subtask(String title, String description, String status) {
+    public Subtask(String title, String description, Status status) {
         super(title, description, status);
     }
 
@@ -17,6 +17,8 @@ public class Subtask extends Task {
 
     @Override
     public String toString() {
-        return getTitle() + " - " + getDescription() + " - Task Status - " + getStatus();
+        return "{Subtask - " + getTitle()
+                + ", Task Description - " + getDescription()
+                + ", Task Status - " + getStatus() + "};";
     }
 }

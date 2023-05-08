@@ -5,7 +5,7 @@ public class Epic extends Task {
     private ArrayList<Integer> subtasksId = new ArrayList<>();
 
     public Epic(String title, String description) {
-        super(title, description, "New");
+        super(title, description, Status.NEW);
     }
     public void addSubtaskId(int idNumber) {
         if (!(subtasksId.contains(idNumber))) {
@@ -13,9 +13,9 @@ public class Epic extends Task {
         }
     }
 
-    public void removeSubtaskId(int idNumber) {
+    public void removeSubtaskId(Integer idNumber) {
         if (subtasksId.contains(idNumber)) {
-            subtasksId.remove((Integer) idNumber);
+            subtasksId.remove(idNumber);
         }
     }
 
@@ -28,9 +28,9 @@ public class Epic extends Task {
     }
     @Override
     public String toString() {
-        return "Epic - " + getTitle()
+        return "{Epic - " + getTitle()
                 + ", Task - " + getDescription()
-                + ", Task Status - " + getStatus();
+                + ", Task Status - " + getStatus() + "};";
     }
 
 }
