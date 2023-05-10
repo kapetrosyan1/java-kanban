@@ -5,6 +5,7 @@ import java.util.LinkedList;
 
 public class InMemoryHistoryManager implements HistoryManager {
     private static LinkedList<Task> history = new LinkedList<>();
+
     @Override
     public void add(Task task) {
         if (task != null) {

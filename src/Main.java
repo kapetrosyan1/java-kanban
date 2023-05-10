@@ -11,6 +11,7 @@ public class Main {
         System.out.println("Поехали!");
         TaskManager manager = Managers.getDefault();
         HistoryManager historyManager = Managers.getHistory();
+        System.out.println(historyManager.getHistory());
         Task task = new Task("Задача 1", "Купить алкоголь", Status.NEW);
         Task task1 = new Task("Задача 2", "Выпить ново-пассит", Status.NEW);
         manager.addTask(task);
