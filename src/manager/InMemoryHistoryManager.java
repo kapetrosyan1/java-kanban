@@ -1,26 +1,86 @@
 package manager;
-
 import tasks.Task;
-import java.util.LinkedList;
+import java.util.*;
 
-public class InMemoryHistoryManager implements HistoryManager {
-    private static LinkedList<Task> history = new LinkedList<>();
+class InMemoryHistoryManager implements HistoryManager {
+     public static class CustomLinkedList<T> {
+         Map<Integer, Node> hashTable = new HashMap<>();
+         private Node head;
+         private Node tail;
 
-    @Override
+
+         public void linkLast(Task task) {
+             if (task != null) {
+                 Node newElement = new Node(task);
+
+                 if (hashTable.containsKey(task.getId())) {
+                     removeNode(hashTable.get(task.getId()));
+                 }
+
+                 if (head == null) {
+                     head = newElement;
+                 } else {
+                     newElement.setPrev(tail);
+                     tail.setNext(newElement);
+                 }
+                 tail = newElement;
+                 hashTable.put(task.getId(), newElement);
+             }
+         }
+
+         public void removeNode(Node node) {
+             if (node != null) {
+                 Node prev = node.getPrev();
+                 Node next = node.getNext();
+
+                 if (head == node) {
+                     hashTable.remove(node.getData().getId());
+                     head = next;
+                     return;
+                 } else if (tail == node) {
+                     tail = prev;
+                     hashTable.remove(node.getData().getId());
+                     return;
+                 }
+
+                 prev.setNext(next);
+                 prev.setPrev(prev);
+                 hashTable.remove(node.getData().getId());
+             }
+         }
+
+         public List<Task> getTasks() {
+             List<Task> taskList = new ArrayList<>();
+             Node nextElement = head.getNext();
+
+             taskList.add(head.getData());
+
+             while (nextElement != null) {
+                 taskList.add(nextElement.getData());
+                 nextElement = nextElement.getNext();
+             }
+
+             return taskList;
+         }
+     }
+     static CustomLinkedList<Task> history = new CustomLinkedList<>();
+
+
+     @Override
     public void add(Task task) {
         if (task != null) {
-            if(history.size() == 10) {
-                history.removeFirst();
-            }
-            history.addLast(task);
+            history.linkLast(task);
         }
     }
 
     @Override
-    public LinkedList<Task> getHistory() {
-        return history;
+    public void remove(int id) {
+
+         history.removeNode(history.hashTable.get(id));
+         }
+
+    @Override
+    public List<Task> getHistory() {
+        return history.getTasks();
     }
 }
-/*Привет, у нас в 4 спринте еще не было связанных списков, но как я понял, должно быть примерно как-то так.
-Попробовал вызвать 11 задач, вроде сработало корректно.
- */

@@ -3,7 +3,6 @@ import org.jetbrains.annotations.NotNull;
 import tasks.*;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Objects;
 
 public class InMemoryTaskManager implements TaskManager {
@@ -194,6 +193,7 @@ public class InMemoryTaskManager implements TaskManager {
             for (Task task : tasks.values()) {
                 if (task.getId() == taskId) {
                     tasks.remove(task.getId());
+                    historyManager.remove(taskId);
                     return;
                 }
             }
@@ -206,6 +206,7 @@ public class InMemoryTaskManager implements TaskManager {
             for (Epic epic : epics.values()) {
                 if (epic.getId() == taskId) {
                     epics.remove(epic.getId());
+                    historyManager.remove(taskId);
                     return;
                 }
             }
@@ -217,11 +218,11 @@ public class InMemoryTaskManager implements TaskManager {
         if(isNotNull(subtasks) && subtasks.containsKey(taskId)) {
             for (Subtask subtask : subtasks.values()) {
                 if (subtask.getId() == taskId) {
-
                     Epic subtasksEpic = epics.get(subtask.getEpicId());
 
                     subtasksEpic.removeSubtaskId(taskId);
                     subtasks.remove(taskId);
+                    historyManager.remove(taskId);
                     updateEpic(subtasksEpic);
                     return;
                 }
