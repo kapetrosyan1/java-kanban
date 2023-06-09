@@ -1,5 +1,4 @@
 import manager.HistoryManager;
-import manager.InMemoryTaskManager;
 import manager.Managers;
 import manager.TaskManager;
 import tasks.*;
@@ -28,6 +27,8 @@ public class Main {
 
         Epic epic2 = new Epic("Эпик 2", "Подготовка к литературе");
         manager.addEpic(epic2);
+
+        System.out.println(historyManager.getHistory());
 
         manager.getTaskById(1);
         manager.getTaskById(2);
