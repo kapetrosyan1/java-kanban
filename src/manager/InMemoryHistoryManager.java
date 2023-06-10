@@ -1,73 +1,76 @@
 package manager;
+
 import tasks.Task;
+
 import java.util.*;
 
 class InMemoryHistoryManager implements HistoryManager {
 
-         private static Map<Integer, Node> hashTable = new HashMap<>();
-         private static Node head;
-         private static Node tail;
+    private static Map<Integer, Node> hashTable = new HashMap<>();
+    private static Node head;
+    private static Node tail;
 
+    public void linkLast(Task task) {
+        if (task != null) {
+            Node newElement = new Node(task);
 
-         public void linkLast(Task task) {
-             if (task != null) {
-                 Node newElement = new Node(task);
+            if (hashTable.containsKey(task.getId())) {
+                removeNode(hashTable.get(task.getId()));
+            }
 
-                 if (hashTable.containsKey(task.getId())) {
-                     removeNode(hashTable.get(task.getId()));
-                 }
+            if (head == null) {
+                head = newElement;
+            } else {
+                newElement.setPrev(tail);
+                tail.setNext(newElement);
+            }
 
-                 if (head == null) {
-                     head = newElement;
-                 } else {
-                     newElement.setPrev(tail);
-                     tail.setNext(newElement);
-                 }
-                 tail = newElement;
-                 hashTable.put(task.getId(), newElement);
-             }
-         }
+            tail = newElement;
 
-         public void removeNode(Node node) {
-             if (node != null) {
-                 Node prev = node.getPrev();
-                 Node next = node.getNext();
+            hashTable.put(task.getId(), newElement);
+        }
+    }
 
-                 if (head == node) {
-                     hashTable.remove(node.getData().getId());
-                     head = next;
-                     return;
-                 } else if (tail == node) {
-                     tail = prev;
-                     hashTable.remove(node.getData().getId());
-                     return;
-                 }
+    public void removeNode(Node node) {
+        if (node != null) {
+            Node prev = node.getPrev();
+            Node next = node.getNext();
 
-                 prev.setNext(next);
-                 prev.setPrev(prev);
-                 hashTable.remove(node.getData().getId());
-             }
-         }
+            if (head == node) {
+                hashTable.remove(node.getData().getId());
+                head = next;
+                return;
+            } else if (tail == node) {
+                tail = prev;
+                hashTable.remove(node.getData().getId());
+                return;
+            }
 
-         public List<Task> getTasks() {
+            prev.setNext(next);
+            prev.setPrev(prev);
+            hashTable.remove(node.getData().getId());
+        }
+    }
 
-             if (head != null) {
-                 List<Task> taskList = new ArrayList<>();
-                 Node nextElement = head.getNext();
+    public List<Task> getTasks() {
 
-                 taskList.add(head.getData());
+        if (head != null) {
+            List<Task> taskList = new ArrayList<>();
+            Node nextElement = head.getNext();
 
-                 while (nextElement != null) {
-                     taskList.add(nextElement.getData());
-                     nextElement = nextElement.getNext();
-                 }
+            taskList.add(head.getData());
 
-                 return taskList;
-             }
-             return null;
-         }
+            while (nextElement != null) {
+                taskList.add(nextElement.getData());
+                nextElement = nextElement.getNext();
+            }
 
-     @Override
+            return taskList;
+        }
+        return null;
+    }
+
+    @Override
     public void add(Task task) {
         if (task != null) {
             linkLast(task);
@@ -76,9 +79,8 @@ class InMemoryHistoryManager implements HistoryManager {
 
     @Override
     public void remove(int id) {
-
-         removeNode(hashTable.get(id));
-         }
+        removeNode(hashTable.get(id));
+    }
 
     @Override
     public List<Task> getHistory() {

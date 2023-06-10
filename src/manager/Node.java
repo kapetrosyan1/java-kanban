@@ -1,15 +1,17 @@
 package manager;
-import tasks.Task;
-public class Node {
-        private Task data;
-        private Node next;
-        private Node prev;
 
-        public Node(Task data) {
-            this.data = data;
-            this.next = null;
-            this.prev = null;
-        }
+import tasks.Task;
+
+public class Node {
+    private Task data;
+    private Node next;
+    private Node prev;
+
+    public Node(Task data) {
+        this.data = data;
+        this.next = null;
+        this.prev = null;
+    }
 
     public Task getData() {
         return data;

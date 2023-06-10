@@ -36,12 +36,12 @@ public class Task {
         this.status = status;
     }
 
-   @Override
+    @Override
     public String toString() {
-       return "{Task  - " + title
-               + ", Description - " + description
-               + ", Task Status - " + status
-               + "};";
+        return "{Task  - " + title
+                + ", Description - " + description
+                + ", Task Status - " + status
+                + "};";
     }
 
 }

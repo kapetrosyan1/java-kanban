@@ -1,6 +1,8 @@
 package manager;
+
 import org.jetbrains.annotations.NotNull;
 import tasks.*;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
@@ -105,54 +107,54 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-   public ArrayList<Task> getAllTasks() {
-       if (!isNotNull(tasks)) return new ArrayList<>();
+    public ArrayList<Task> getAllTasks() {
+        if (!isNotNull(tasks)) return new ArrayList<>();
 
-       ArrayList<Task> allTasks = new ArrayList<>();
+        ArrayList<Task> allTasks = new ArrayList<>();
 
-       for (Task task : tasks.values()) {
-           allTasks.add(task);
-       }
-       return allTasks;
-   }
-
-    @Override
-   public ArrayList<Epic> getAllEpics() {
-       if (!isNotNull(epics)) return new ArrayList<>();
-
-       ArrayList<Epic> allEpics = new ArrayList<>();
-
-       for (Epic epic : epics.values()) {
-           allEpics.add(epic);
-       }
-       return allEpics;
-   }
+        for (Task task : tasks.values()) {
+            allTasks.add(task);
+        }
+        return allTasks;
+    }
 
     @Override
-   public ArrayList<Subtask> getAllSubtasks() {
-       if (!isNotNull(subtasks)) return new ArrayList<>();
+    public ArrayList<Epic> getAllEpics() {
+        if (!isNotNull(epics)) return new ArrayList<>();
 
-       ArrayList<Subtask> allSubtasks = new ArrayList<>();
+        ArrayList<Epic> allEpics = new ArrayList<>();
 
-       for (Subtask subtask : subtasks.values()) {
-           allSubtasks.add(subtask);
-       }
-       return allSubtasks;
-   }
+        for (Epic epic : epics.values()) {
+            allEpics.add(epic);
+        }
+        return allEpics;
+    }
 
     @Override
-   public ArrayList<Subtask> getAllEpicsSubtasks(Epic epic) {
-       if (!isNotNull(epic) && !isNotNull(subtasks)) return new ArrayList<>();
+    public ArrayList<Subtask> getAllSubtasks() {
+        if (!isNotNull(subtasks)) return new ArrayList<>();
 
-       ArrayList<Subtask> epicsSubtasks = new ArrayList<>();
+        ArrayList<Subtask> allSubtasks = new ArrayList<>();
 
-       for (Subtask subtask : subtasks.values()) {
-           if (subtask.getEpicId() == epic.getId()) {
-               epicsSubtasks.add(subtask);
-           }
-       }
-       return epicsSubtasks;
-   }
+        for (Subtask subtask : subtasks.values()) {
+            allSubtasks.add(subtask);
+        }
+        return allSubtasks;
+    }
+
+    @Override
+    public ArrayList<Subtask> getAllEpicsSubtasks(Epic epic) {
+        if (!isNotNull(epic) && !isNotNull(subtasks)) return new ArrayList<>();
+
+        ArrayList<Subtask> epicsSubtasks = new ArrayList<>();
+
+        for (Subtask subtask : subtasks.values()) {
+            if (subtask.getEpicId() == epic.getId()) {
+                epicsSubtasks.add(subtask);
+            }
+        }
+        return epicsSubtasks;
+    }
 
     @Override
     public Task getTaskById(int taskId) {
@@ -215,7 +217,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void removeSubtaskById(int taskId) {
-        if(isNotNull(subtasks) && subtasks.containsKey(taskId)) {
+        if (isNotNull(subtasks) && subtasks.containsKey(taskId)) {
             for (Subtask subtask : subtasks.values()) {
                 if (subtask.getId() == taskId) {
                     Epic subtasksEpic = epics.get(subtask.getEpicId());
