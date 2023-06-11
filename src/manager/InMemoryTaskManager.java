@@ -9,10 +9,10 @@ import java.util.Objects;
 
 public class InMemoryTaskManager implements TaskManager {
     private int nextId = 1;
-    private HashMap<Integer, Task> tasks = new HashMap<>();
-    private HashMap<Integer, Epic> epics = new HashMap<>();
-    private HashMap<Integer, Subtask> subtasks = new HashMap<>();
-    private HistoryManager historyManager = Managers.getHistory();
+    private final HashMap<Integer, Task> tasks = new HashMap<>();
+    private final HashMap<Integer, Epic> epics = new HashMap<>();
+    private final HashMap<Integer, Subtask> subtasks = new HashMap<>();
+    private final HistoryManager historyManager = Managers.getHistory();
 
     @Override
     public void addTask(Task task) {
@@ -61,21 +61,21 @@ public class InMemoryTaskManager implements TaskManager {
         }
     }
 
-    public boolean isNew(@NotNull Epic epic) {
+    private boolean isNew(@NotNull Epic epic) {
         if (epic.getSubtasksId() == null) {
             return true;
         }
         for (int id : epic.getSubtasksId()) {
-            if (!(subtasks.get(id).getStatus().equals("New"))) {
+            if (!(subtasks.get(id).getStatus().equals(Status.NEW))) {
                 return false;
             }
         }
         return true;
     }
 
-    public boolean isDone(@NotNull Epic epic) {
+    private boolean isDone(@NotNull Epic epic) {
         for (int id : epic.getSubtasksId()) {
-            if (!(Objects.equals(subtasks.get(id).getStatus(), "Done"))) {
+            if (!(Objects.equals(subtasks.get(id).getStatus(), Status.DONE))) {
                 return false;
             }
         }
@@ -252,7 +252,6 @@ public class InMemoryTaskManager implements TaskManager {
             }
         }
     }
-
 
     public boolean isNotNull(Object object) {
         return object != null;
