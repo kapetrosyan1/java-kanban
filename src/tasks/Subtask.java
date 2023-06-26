@@ -1,10 +1,15 @@
 package tasks;
 
 public class Subtask extends Task {
-    private int epicId;
+    private static int epicId;
 
-    public Subtask(String title, String description, Status status) {
-        super(title, description, status);
+    public Subtask(String title, Status status, String description) {
+        super(title, status, description);
+    }
+
+    public Subtask(int id, String title, Status status, String description, int epicId) {
+        super(id, title, status, description);
+        this.epicId = epicId;
     }
 
     public int getEpicId() {
@@ -17,9 +22,7 @@ public class Subtask extends Task {
 
     @Override
     public String toString() {
-        return "{" + getTitle()
-                + " " + getDescription()
-                + ", Task Status - " + getStatus()
-                + "};";
+        return getId() + "," + TasksTypes.SUBTASK + "," + getTitle() + "," + getStatus() + "," + getDescription() + ","
+                + getEpicId();
     }
 }

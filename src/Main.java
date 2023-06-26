@@ -12,15 +12,15 @@ public class Main {
         TaskManager manager = Managers.getDefault();
         HistoryManager historyManager = Managers.getHistory();
 
-        Task task = new Task("Задача 1", "Купить алкоголь", Status.NEW);
-        Task task1 = new Task("Задача 2", "Выпить ново-пассит", Status.NEW);
+        Task task = new Task("Задача 1", Status.NEW, "Купить алкоголь");
+        Task task1 = new Task("Задача 2", Status.NEW, "Выпить ново-пассит");
         manager.addTask(task);
         manager.addTask(task1);
 
         Epic epic = new Epic("Эпик 1", "Покупка продуктов");
-        Subtask subtask = new Subtask("подзадача 1.", "Купить гречку", Status.NEW);
-        Subtask subtask1 = new Subtask("подзадача 2.", "Купить мясо", Status.NEW);
-        Subtask subtask2 = new Subtask("подзадача 3.", "Купить мясо", Status.NEW);
+        Subtask subtask = new Subtask("подзадача 1.", Status.NEW, "Купить гречку");
+        Subtask subtask1 = new Subtask("подзадача 2.", Status.NEW, "Купить мясо");
+        Subtask subtask2 = new Subtask("подзадача 3.", Status.NEW, "Купить мясо");
         manager.addEpic(epic);
         manager.addSubtask(subtask, epic);
         manager.addSubtask(subtask1, epic);

@@ -1,15 +1,24 @@
 package tasks;
 
-public class Task {
-    private final String title;
-    private final String description;
-    private int id;
-    private Status status;
+import static tasks.TasksTypes.*;
 
-    public Task(String title, String description, Status status) {
+public class Task {
+    private int id;
+    private final String title;
+    private Status status;
+    private final String description;
+
+    public Task(String title, Status status, String description) {
         this.title = title;
-        this.description = description;
         this.status = status;
+        this.description = description;
+    }
+
+    public Task(int id, String title, Status status, String description) {
+        this.id = id;
+        this.title = title;
+        this.status = status;
+        this.description = description;
     }
 
     public String getTitle() {
@@ -38,10 +47,7 @@ public class Task {
 
     @Override
     public String toString() {
-        return "{Task  - " + title
-                + ", Description - " + description
-                + ", Task Status - " + status
-                + "};";
+        return id + "," + TasksTypes.TASK + "," + title + "," + status + "," + description;
     }
 
 }

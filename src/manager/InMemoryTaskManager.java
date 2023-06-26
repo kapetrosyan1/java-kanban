@@ -9,10 +9,10 @@ import java.util.Objects;
 
 public class InMemoryTaskManager implements TaskManager {
     private int nextId = 1;
-    private final HashMap<Integer, Task> tasks = new HashMap<>();
-    private final HashMap<Integer, Epic> epics = new HashMap<>();
-    private final HashMap<Integer, Subtask> subtasks = new HashMap<>();
-    private final HistoryManager historyManager = Managers.getHistory();
+    protected final HashMap<Integer, Task> tasks = new HashMap<>();
+    protected final HashMap<Integer, Epic> epics = new HashMap<>();
+    protected final HashMap<Integer, Subtask> subtasks = new HashMap<>();
+    protected final HistoryManager historyManager = Managers.getHistory();
 
     @Override
     public void addTask(Task task) {
@@ -234,16 +234,25 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void removeAllTasks() {
+        for (Integer id : tasks.keySet()) {
+            historyManager.remove(id);
+        }
         tasks.clear();
     }
 
     @Override
     public void removeAllEpics() {
+        for (Integer id : epics.keySet()) {
+            historyManager.remove(id);
+        }
         epics.clear();
     }
 
     @Override
     public void removeAllSubtasks() {
+        for (Integer id : subtasks.keySet()) {
+            historyManager.remove(id);
+        }
         subtasks.clear();
         if (isNotNull(epics)) {
             for (Epic epic : epics.values()) {
@@ -252,6 +261,23 @@ public class InMemoryTaskManager implements TaskManager {
             }
         }
     }
+
+    public static void setNextId(int nextId) {
+        nextId = nextId;
+    }
+
+    public void addBackedTask(Task task) {
+        tasks.put(task.getId(), task);
+    }
+
+    public void addBackedEpic(Epic epic) {
+        tasks.put(epic.getId(), epic);
+    }
+
+    public void addBackedSubtask(Subtask subtask) {
+        tasks.put(subtask.getId(), subtask);
+    }
+
 
     public boolean isNotNull(Object object) {
         return object != null;

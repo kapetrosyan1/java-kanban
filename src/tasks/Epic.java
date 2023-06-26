@@ -5,8 +5,13 @@ public class Epic extends Task {
     private ArrayList<Integer> subtasksId = new ArrayList<>();
 
     public Epic(String title, String description) {
-        super(title, description, Status.NEW);
+        super(title, Status.NEW, description);
     }
+
+    public Epic(int id, String title,  Status status, String description) {
+        super(id, title, status, description);
+    }
+
     public void addSubtaskId(int idNumber) {
         if (!(subtasksId.contains(idNumber))) {
             subtasksId.add(idNumber);
@@ -28,9 +33,7 @@ public class Epic extends Task {
     }
     @Override
     public String toString() {
-        return "{Epic - " + getTitle()
-                + ", Task - " + getDescription()
-                + ", Task Status - " + getStatus() + "};";
+        return getId() + "," + TasksTypes.EPIC + "," + getTitle() + "," + getStatus() + "," + getDescription();
     }
 
 }
