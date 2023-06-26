@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Objects;
 
 public class InMemoryTaskManager implements TaskManager {
-    private int nextId = 1;
+    private static int nextId = 1;
     protected final HashMap<Integer, Task> tasks = new HashMap<>();
     protected final HashMap<Integer, Epic> epics = new HashMap<>();
     protected final HashMap<Integer, Subtask> subtasks = new HashMap<>();
@@ -262,8 +262,8 @@ public class InMemoryTaskManager implements TaskManager {
         }
     }
 
-    public static void setNextId(int nextId) {
-        nextId = nextId;
+    public static void setNextId(int newValue) {
+        nextId = newValue;
     }
 
     public void addBackedTask(Task task) {

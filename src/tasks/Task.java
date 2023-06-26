@@ -1,7 +1,5 @@
 package tasks;
 
-import static tasks.TasksTypes.*;
-
 public class Task {
     private int id;
     private final String title;
