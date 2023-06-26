@@ -44,11 +44,12 @@ public class Transformer {
 
     public static List<Integer> historyFromString(String value) {
         List<Integer> history = new ArrayList<>();
+        if (!value.isBlank()) {
+            String[] historyRecs = value.split(",");
 
-        String[] historyRecs = value.split(",");
-
-        for (String id : historyRecs) {
-            history.add(Integer.parseInt(id));
+            for (String id : historyRecs) {
+                history.add(Integer.parseInt(id));
+            }
         }
         return history;
     }

@@ -19,19 +19,19 @@ public class FileBackedTasksManager extends InMemoryTaskManager implements TaskM
     public static void main(String[] args) {
         try {
             FileBackedTasksManager fileBackedTasksManager
-                    = new FileBackedTasksManager(Path.of(
-                    "recovery.csv"));
+                    = new FileBackedTasksManager(Path.of("src/manager/files/recovery.csv"));
 
             Task task = new Task("Задача 1", Status.NEW, "Купить алкоголь");
             Task task1 = new Task("Задача 2", Status.NEW, "Выпить ново-пассит");
             fileBackedTasksManager.addTask(task);
             fileBackedTasksManager.addTask(task1);
-
             Epic epic = new Epic("Эпик 1", "Покупка продуктов");
             Subtask subtask = new Subtask("подзадача 1.", Status.NEW, "Купить гречку");
             Subtask subtask1 = new Subtask("подзадача 2.", Status.NEW, "Купить мясо");
             Subtask subtask2 = new Subtask("подзадача 3.", Status.NEW, "Купить мясо");
+
             fileBackedTasksManager.addEpic(epic);
+
             fileBackedTasksManager.addSubtask(subtask, epic);
             fileBackedTasksManager.addSubtask(subtask1, epic);
             fileBackedTasksManager.addSubtask(subtask2, epic);
@@ -46,7 +46,9 @@ public class FileBackedTasksManager extends InMemoryTaskManager implements TaskM
             fileBackedTasksManager.getSubtaskById(5);
             fileBackedTasksManager.getSubtaskById(6);
             System.out.println(fileBackedTasksManager.historyManager.getHistory());
-            loadFromFile(new File("recovery.csv"));
+
+            loadFromFile(new File("src/manager/files/recovery.csv"));
+
             System.out.println(fileBackedTasksManager.historyManager.getHistory());
 
         } catch (ManagerSaveException e) {
@@ -88,8 +90,8 @@ public class FileBackedTasksManager extends InMemoryTaskManager implements TaskM
         for (int i = 1; i < csvToString.size() - 2; i++) {
             Task task = Transformer.taskFromString(csvToString.get(i));
 
-            if (csvToString.get(i).contains(String.valueOf(TasksTypes.TASK))) {
-                fileBackedTasksManager.addBackedTask(task);
+            if (csvToString.get(i).contains(String.valueOf(TasksTypes.SUBTASK))) {
+                fileBackedTasksManager.addBackedSubtask((Subtask) task);
                 if (task.getId() > nextId) {
                     nextId = task.getId() + 1;
                 }
@@ -99,19 +101,21 @@ public class FileBackedTasksManager extends InMemoryTaskManager implements TaskM
                 if (task.getId() > nextId) {
                     nextId = task.getId() + 1;
                 }
-            } else if (csvToString.get(i).contains(String.valueOf(TasksTypes.SUBTASK))) {
-                fileBackedTasksManager.addBackedSubtask((Subtask) task);
+            } else if (csvToString.get(i).contains(String.valueOf(TasksTypes.TASK))) {
+                fileBackedTasksManager.addBackedTask(task);
                 if (task.getId() > nextId) {
                     nextId = task.getId() + 1;
                 }
             }
         }
 
+
         InMemoryTaskManager.setNextId(nextId);
 
         String history = csvToString.get(csvToString.size() - 1);
         List<Integer> historyRecs = Transformer.historyFromString(history);
-        for (Integer id : historyRecs) {
+        for (
+                Integer id : historyRecs) {
             if (fileBackedTasksManager.tasks.containsKey(id)) {
                 fileBackedTasksManager.getTaskById(id);
             } else if (fileBackedTasksManager.epics.containsKey(id)) {

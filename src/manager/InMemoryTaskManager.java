@@ -271,11 +271,11 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     public void addBackedEpic(Epic epic) {
-        tasks.put(epic.getId(), epic);
+        epics.put(epic.getId(), epic);
     }
 
     public void addBackedSubtask(Subtask subtask) {
-        tasks.put(subtask.getId(), subtask);
+        subtasks.put(subtask.getId(), subtask);
     }
 
 
