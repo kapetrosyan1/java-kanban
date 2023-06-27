@@ -9,8 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FileBackedTasksManager extends InMemoryTaskManager implements TaskManager {
-
-    Path filePath;
+    private final Path filePath;
 
     public FileBackedTasksManager(Path filePath) {
         this.filePath = filePath;
@@ -19,7 +18,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager implements TaskM
     public static void main(String[] args) {
         try {
             FileBackedTasksManager fileBackedTasksManager
-                    = new FileBackedTasksManager(Path.of("src/manager/files/recovery.csv"));
+                    = new FileBackedTasksManager(Path.of("resources/recovery.csv"));
 
             Task task = new Task("Задача 1", Status.NEW, "Купить алкоголь");
             Task task1 = new Task("Задача 2", Status.NEW, "Выпить ново-пассит");
@@ -47,10 +46,9 @@ public class FileBackedTasksManager extends InMemoryTaskManager implements TaskM
             fileBackedTasksManager.getSubtaskById(6);
             System.out.println(fileBackedTasksManager.historyManager.getHistory());
 
-            loadFromFile(new File("src/manager/files/recovery.csv"));
+            loadFromFile(new File("resources/recovery.csv"));
 
             System.out.println(fileBackedTasksManager.historyManager.getHistory());
-
         } catch (ManagerSaveException e) {
             System.out.println(e.getMessage());
         }
@@ -112,8 +110,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager implements TaskM
 
         String history = csvToString.get(csvToString.size() - 1);
         List<Integer> historyRecs = Transformer.historyFromString(history);
-        for (
-                Integer id : historyRecs) {
+        for (Integer id : historyRecs) {
             if (fileBackedTasksManager.tasks.containsKey(id)) {
                 fileBackedTasksManager.getTaskById(id);
             } else if (fileBackedTasksManager.epics.containsKey(id)) {
