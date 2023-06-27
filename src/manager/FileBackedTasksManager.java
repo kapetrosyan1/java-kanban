@@ -92,24 +92,22 @@ public class FileBackedTasksManager extends InMemoryTaskManager implements TaskM
 
             if (csvToString.get(i).contains(String.valueOf(TasksTypes.SUBTASK))) {
                 fileBackedTasksManager.addBackedSubtask((Subtask) task);
-                if (task.getId() > nextId) {
+                if (task.getId() >= nextId) {
                     nextId = task.getId() + 1;
                 }
             } else if (csvToString.get(i).contains(String.valueOf(TasksTypes.EPIC))) {
                 fileBackedTasksManager.addBackedEpic((Epic) task);
                 fileBackedTasksManager.updateEpic((Epic) task);
-                if (task.getId() > nextId) {
+                if (task.getId() >= nextId) {
                     nextId = task.getId() + 1;
                 }
             } else if (csvToString.get(i).contains(String.valueOf(TasksTypes.TASK))) {
                 fileBackedTasksManager.addBackedTask(task);
-                if (task.getId() > nextId) {
+                if (task.getId() >= nextId) {
                     nextId = task.getId() + 1;
                 }
             }
         }
-
-
         InMemoryTaskManager.setNextId(nextId);
 
         String history = csvToString.get(csvToString.size() - 1);
