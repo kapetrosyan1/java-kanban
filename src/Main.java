@@ -1,53 +1,22 @@
-import manager.HistoryManager;
-import manager.Managers;
-import manager.TaskManager;
-import tasks.*;
+import exceptions.ManagerSaveException;
+import managers.fileBackedTasksManager.FileBackedTasksManager;
+import managers.inMemoryManagers.InMemoryTasksManager;
+import managers.interfaces.TaskManager;
+import managers.utilityClasses.Managers;
+import tasks.Enums.Status;
+import tasks.Epic;
+import tasks.Subtask;
+import tasks.Task;
+
+import java.nio.file.Path;
+import java.time.LocalDateTime;
 
 public class Main {
-
     public static void main(String[] args) {
-
-
-        System.out.println("Поехали!");
-        TaskManager manager = Managers.getDefault();
-        HistoryManager historyManager = Managers.getHistory();
-
-        Task task = new Task("Задача 1", Status.NEW, "Купить алкоголь");
-        Task task1 = new Task("Задача 2", Status.NEW, "Выпить ново-пассит");
-        manager.addTask(task);
-        manager.addTask(task1);
-
-        Epic epic = new Epic("Эпик 1", "Покупка продуктов");
-        Subtask subtask = new Subtask("подзадача 1.", Status.NEW, "Купить гречку");
-        Subtask subtask1 = new Subtask("подзадача 2.", Status.NEW, "Купить мясо");
-        Subtask subtask2 = new Subtask("подзадача 3.", Status.NEW, "Купить мясо");
-        manager.addEpic(epic);
-        manager.addSubtask(subtask, epic);
-        manager.addSubtask(subtask1, epic);
-        manager.addSubtask(subtask2, epic);
-
-        Epic epic2 = new Epic("Эпик 2", "Подготовка к литературе");
-        manager.addEpic(epic2);
-
-        System.out.println(historyManager.getHistory());
-
-        manager.getTaskById(1);
-        manager.getTaskById(2);
-        manager.getEpicById(3);
-        manager.getSubtaskById(4);
-        manager.getSubtaskById(5);
-        manager.getSubtaskById(6);
-
-        System.out.println(historyManager.getHistory());
-
-        manager.getTaskById(1);
-        manager.getEpicById(3);
-
-        System.out.println(historyManager.getHistory());
-
-        manager.removeTaskById(2);
-
-        System.out.println(historyManager.getHistory());
-
+        TaskManager taskManager = Managers.getFileBackedManager(Path.of("resources/recovery.csv"));
+        Task task = new Task("Task", Status.NEW, "description", LocalDateTime.of(
+                2023, 1, 1, 11, 30), 180);
+        taskManager.addTask(task);
+        System.out.println(task);
     }
 }

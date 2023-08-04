@@ -1,9 +1,15 @@
 package tasks;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+
+import org.jetbrains.annotations.NotNull;
+import tasks.Enums.Status;
+import tasks.Enums.TasksTypes;
 
 public class Epic extends Task {
     private final ArrayList<Integer> subtasksId = new ArrayList<>();
+    private LocalDateTime endTime;
 
     public Epic(String title, String description) {
         super(title, Status.NEW, description);
@@ -11,6 +17,11 @@ public class Epic extends Task {
 
     public Epic(int id, String title, Status status, String description) {
         super(id, title, status, description);
+    }
+
+    public Epic(int id, String title, String description) {
+        super(title, Status.NEW, description);
+        this.setId(id);
     }
 
     public void addSubtaskId(int idNumber) {
@@ -33,9 +44,17 @@ public class Epic extends Task {
         return subtasksId;
     }
 
+    public void setEndTime(LocalDateTime endTime) {
+        this.endTime = endTime;
+    }
+
+    @Override
+    public LocalDateTime getEndTime() {
+        return endTime;
+    }
+
     @Override
     public String toString() {
         return getId() + "," + TasksTypes.EPIC + "," + getTitle() + "," + getStatus() + "," + getDescription();
     }
-
 }
