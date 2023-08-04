@@ -67,8 +67,8 @@ public class Transformer {
             String title = fields[2];
             Status status = Status.valueOf(fields[3]);
             String description = fields[4];
-                LocalDateTime startTime = null;
-                long duration = 0;
+            LocalDateTime startTime = null;
+            long duration = 0;
 
             if (!type.equals(TasksTypes.EPIC)) {
                 if (!fields[5].equals("null")) {
@@ -92,4 +92,3 @@ public class Transformer {
         throw new IllegalArgumentException("Ошибка формата задачи");
     }
 }
-

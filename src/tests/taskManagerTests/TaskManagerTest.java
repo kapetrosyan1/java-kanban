@@ -11,7 +11,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 abstract class TaskManagerTest<T extends TaskManager> {
     public T taskManager;

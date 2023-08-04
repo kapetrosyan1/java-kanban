@@ -94,27 +94,27 @@ public class FileBackedTasksManager extends InMemoryTasksManager {
         if (csvToString.isEmpty() || csvToString.size() <= 2) return fileBackedTasksManager;
         int nextId = 1;
 
-            for (int i = 1; i <= csvToString.size() - 2; i++) {
-                Task task = Transformer.taskFromString(csvToString.get(i));
+        for (int i = 1; i <= csvToString.size() - 2; i++) {
+            Task task = Transformer.taskFromString(csvToString.get(i));
 
-                if (csvToString.get(i).contains(String.valueOf(TasksTypes.SUBTASK))) {
-                    fileBackedTasksManager.addBackedSubtask((Subtask) task);
-                    if (task.getId() >= nextId) {
-                        nextId = task.getId() + 1;
-                    }
-                } else if (csvToString.get(i).contains(String.valueOf(TasksTypes.EPIC))) {
-                    fileBackedTasksManager.addBackedEpic((Epic) task);
-                    fileBackedTasksManager.updateEpic((Epic) task);
-                    if (task.getId() >= nextId) {
-                        nextId = task.getId() + 1;
-                    }
-                } else if (csvToString.get(i).contains(String.valueOf(TasksTypes.TASK))) {
-                    fileBackedTasksManager.addBackedTask(task);
-                    if (task.getId() >= nextId) {
-                        nextId = task.getId() + 1;
-                    }
+            if (csvToString.get(i).contains(String.valueOf(TasksTypes.SUBTASK))) {
+                fileBackedTasksManager.addBackedSubtask((Subtask) task);
+                if (task.getId() >= nextId) {
+                    nextId = task.getId() + 1;
+                }
+            } else if (csvToString.get(i).contains(String.valueOf(TasksTypes.EPIC))) {
+                fileBackedTasksManager.addBackedEpic((Epic) task);
+                fileBackedTasksManager.updateEpic((Epic) task);
+                if (task.getId() >= nextId) {
+                    nextId = task.getId() + 1;
+                }
+            } else if (csvToString.get(i).contains(String.valueOf(TasksTypes.TASK))) {
+                fileBackedTasksManager.addBackedTask(task);
+                if (task.getId() >= nextId) {
+                    nextId = task.getId() + 1;
                 }
             }
+        }
         fileBackedTasksManager.setNextId(nextId);
 
         if (csvToString.size() > 1 && !csvToString.get(csvToString.size() - 1).isBlank()) {
