@@ -4,7 +4,6 @@ import exceptions.ManagerSaveException;
 import managers.inMemoryManagers.InMemoryTasksManager;
 import managers.utilityClasses.Transformer;
 import org.jetbrains.annotations.NotNull;
-import tasks.Enums.Status;
 import tasks.Enums.TasksTypes;
 import tasks.Epic;
 import tasks.Subtask;
@@ -20,47 +19,6 @@ public class FileBackedTasksManager extends InMemoryTasksManager {
 
     public FileBackedTasksManager(Path filePath) {
         this.filePath = filePath;
-    }
-
-    public static void main(String[] args) {
-        try {
-            FileBackedTasksManager fileBackedTasksManager
-                    = new FileBackedTasksManager(Path.of("resources/recovery.csv"));
-
-            Task task = new Task("Задача 1", Status.NEW, "Купить алкоголь");
-            Task task1 = new Task("Задача 2", Status.NEW, "Выпить ново-пассит");
-            fileBackedTasksManager.addTask(task);
-            fileBackedTasksManager.addTask(task1);
-            Epic epic = new Epic("Эпик 1", "Покупка продуктов");
-            Subtask subtask = new Subtask("подзадача 1.", Status.NEW, "Купить гречку", 3);
-            Subtask subtask1 = new Subtask("подзадача 2.", Status.NEW, "Купить мясо", 3);
-            Subtask subtask2 = new Subtask("подзадача 3.", Status.NEW, "Купить мясо", 3);
-
-            fileBackedTasksManager.addEpic(epic);
-
-            fileBackedTasksManager.addSubtask(subtask);
-            fileBackedTasksManager.addSubtask(subtask1);
-            fileBackedTasksManager.addSubtask(subtask2);
-
-            Epic epic2 = new Epic("Эпик 2", "Подготовка к литературе");
-            fileBackedTasksManager.addEpic(epic2);
-
-            fileBackedTasksManager.getTaskById(1);
-            fileBackedTasksManager.getTaskById(2);
-            fileBackedTasksManager.getEpicById(3);
-            fileBackedTasksManager.getSubtaskById(4);
-            fileBackedTasksManager.getSubtaskById(6);
-            fileBackedTasksManager.getSubtaskById(5);
-            System.out.println(fileBackedTasksManager.historyManager.getHistory());
-            fileBackedTasksManager = loadFromFile(new File("resources/recovery.csv"));
-            fileBackedTasksManager.getTaskById(2);
-            fileBackedTasksManager.getSubtaskById(4);
-            System.out.println(fileBackedTasksManager.historyManager.getHistory());
-            fileBackedTasksManager.clearTasks();
-
-        } catch (ManagerSaveException e) {
-            System.out.println(e.getMessage());
-        }
     }
 
     private void save() {
@@ -91,7 +49,9 @@ public class FileBackedTasksManager extends InMemoryTasksManager {
             throw new ManagerSaveException("Ошибка чтения файла");
         }
 
-        if (csvToString.isEmpty() || csvToString.size() <= 2) return fileBackedTasksManager;
+        if (csvToString.isEmpty() || csvToString.size() <= 2) {
+            return fileBackedTasksManager;
+        }
         int nextId = 1;
 
         for (int i = 1; i <= csvToString.size() - 2; i++) {
@@ -117,7 +77,7 @@ public class FileBackedTasksManager extends InMemoryTasksManager {
         }
         fileBackedTasksManager.setNextId(nextId);
 
-        if (csvToString.size() > 1 && !csvToString.get(csvToString.size() - 1).isBlank()) {
+        if (!csvToString.get(csvToString.size() - 1).isBlank()) {
             String history = csvToString.get(csvToString.size() - 1);
             List<Integer> historyRecs = Transformer.historyFromString(history);
             for (
