@@ -30,8 +30,8 @@ public class HttpTaskManager extends FileBackedTasksManager {
         gson = new GsonBuilder()
                 .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
                 .create();
-            load();
-        }
+        load();
+    }
 
     public HttpTaskManager(String URL, boolean isLoad) {
         super(null);
