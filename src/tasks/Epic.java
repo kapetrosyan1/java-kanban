@@ -30,9 +30,7 @@ public class Epic extends Task {
     }
 
     public void removeSubtaskId(Integer idNumber) {
-        if (subtasksId.contains(idNumber)) {
-            subtasksId.remove(idNumber);
-        }
+        subtasksId.remove(idNumber);
     }
 
     public void clearSubtasksId() {
@@ -53,7 +51,12 @@ public class Epic extends Task {
     }
 
     @Override
+    public TasksTypes getTaskType() {
+        return TasksTypes.EPIC;
+    }
+
+    @Override
     public String toString() {
-        return getId() + "," + TasksTypes.EPIC + "," + getTitle() + "," + getStatus() + "," + getDescription();
+        return getId() + "," + getTaskType() + "," + getTitle() + "," + getStatus() + "," + getDescription();
     }
 }

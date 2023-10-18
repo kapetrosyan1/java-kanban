@@ -33,7 +33,7 @@ class HistoryManagerTest {
         Epic epic = new Epic(2, "Epic", Status.DONE, "description");
         historyManager.add(epic);
         assertEquals(2, historyManager.getHistory().size(), "История не полная.");
-        assertEquals(List.of(task, epic), historyManager.getHistory(), "Неправильный порядок истории" );
+        assertEquals(List.of(task, epic), historyManager.getHistory(), "Неправильный порядок истории");
 
         historyManager.add(task);
         assertEquals(2, historyManager.getHistory().size(), "История не полная.");

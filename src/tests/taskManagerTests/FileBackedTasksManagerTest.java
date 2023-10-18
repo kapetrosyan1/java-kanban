@@ -42,6 +42,7 @@ class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksManager>
         assertEquals(subtask.toString(), taskManager.historyManager.getHistory().get(2).toString(), "Ошибка истории");
         assertEquals(List.of(subtaskId), epic.getSubtasksId(), "Неверный список подзадач у эпика");
     }
+
     @Test
     protected void loadWithEmptyTaskList() {
         Task task = new Task("Task", Status.NEW, "description");
@@ -111,12 +112,10 @@ class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksManager>
         assertEquals(List.of(epic), taskManager.getAllEpics(), "Ошибка загрузки эпиков");
         assertEquals(List.of(subtask), taskManager.getAllSubtasks(), "Ошибка загрузки подзадач");
         assertEquals(List.of(subtask, task), taskManager.getPrioritizedTasks(), "Ошибка приоритета задач");
-        assertEquals(task.getStartTime(), taskManager.getTaskById(taskId).getStartTime(),"Ошибка загрузки задач");
+        assertEquals(task.getStartTime(), taskManager.getTaskById(taskId).getStartTime(), "Ошибка загрузки задач");
         assertEquals(task.getDuration(), taskManager.getTaskById(taskId).getDuration(), "Ошибка загрузки задач");
         assertEquals(subtask.getStartTime(), taskManager.getEpicById(epicId).getStartTime(), "Ошибка загрузки подзадач");
         assertEquals(subtask.getStartTime(), taskManager.getSubtaskById(subtaskId).getStartTime(), "Ошибка загрузки подзадач");
 
     }
-
-
 }

@@ -1,6 +1,5 @@
 package tasks;
 
-import org.jetbrains.annotations.NotNull;
 import tasks.Enums.Status;
 import tasks.Enums.TasksTypes;
 
@@ -92,10 +91,15 @@ public class Task {
     }
 
     public String startTimeToString() {
-        if (startTime == null) return null;
+        if (startTime == null) {
+            return null;
+        }
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm");
-        String formattedStartTime = startTime.format(formatter);
-        return formattedStartTime;
+        return startTime.format(formatter);
+    }
+
+    public TasksTypes getTaskType() {
+        return TasksTypes.TASK;
     }
 
     @Override
@@ -113,8 +117,7 @@ public class Task {
     }
 
     public String toString() {
-        return id + "," + TasksTypes.TASK + "," + title + "," + status + "," + description + "," + startTimeToString()
+        return id + "," + getTaskType() + "," + title + "," + status + "," + description + "," + startTimeToString()
                 + "," + duration;
     }
-
 }

@@ -321,4 +321,19 @@ abstract class TaskManagerTest<T extends TaskManager> {
         assertEquals(1, taskManager.getPrioritizedTasks().size(), "Задачи конфликтуют по времени");
         assertEquals(List.of(task), taskManager.getPrioritizedTasks(), "Сохранена неверная задача");
     }
+
+    @Test
+    protected void noTimeConflictWithItselfWhenUpdateTask() {
+        Task task = new Task("Task", Status.NEW, "description",
+                LocalDateTime.of(2023, 5, 1, 0, 0), 20);
+        taskManager.addTask(task);
+
+        Task updatedTask = new Task(1, "Task", Status.NEW, "description",
+                LocalDateTime.of(2023, 5, 1, 0, 10), 20);
+
+        taskManager.updateTask(updatedTask);
+
+        assertEquals(1, taskManager.getAllTasks().size(), "Должна быть одна задача");
+        assertEquals(List.of(updatedTask), taskManager.getAllTasks(), "Задача конфликтует сама с собой");
+    }
 }

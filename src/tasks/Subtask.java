@@ -6,7 +6,7 @@ import tasks.Enums.TasksTypes;
 import java.time.LocalDateTime;
 
 public class Subtask extends Task {
-    private int epicId;
+    private final int epicId;
 
     public Subtask(String title, Status status, String description, int epicId) {
         super(title, status, description);
@@ -30,17 +30,18 @@ public class Subtask extends Task {
         this.epicId = epicId;
     }
 
+    @Override
+    public TasksTypes getTaskType() {
+        return TasksTypes.SUBTASK;
+    }
+
     public int getEpicId() {
         return epicId;
     }
 
-    public void setEpicId(int epicId) {
-        this.epicId = epicId;
-    }
-
     @Override
     public String toString() {
-        return getId() + "," + TasksTypes.SUBTASK + "," + getTitle() + "," + getStatus() + "," + getDescription()
+        return getId() + "," + getTaskType() + "," + getTitle() + "," + getStatus() + "," + getDescription()
                 + "," + startTimeToString() + "," + getDuration() + "," + getEpicId();
     }
 }

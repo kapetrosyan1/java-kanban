@@ -3,7 +3,6 @@ package managers.fileBackedTasksManager;
 import exceptions.ManagerSaveException;
 import managers.inMemoryManagers.InMemoryTasksManager;
 import managers.utilityClasses.Transformer;
-import org.jetbrains.annotations.NotNull;
 import tasks.Enums.TasksTypes;
 import tasks.Epic;
 import tasks.Subtask;
@@ -21,7 +20,7 @@ public class FileBackedTasksManager extends InMemoryTasksManager {
         this.filePath = filePath;
     }
 
-    private void save() {
+    public void save() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath.toString()))) {
 
             String header = "id,type,name,status,description,startTime,duration,epicId" + "\n";
@@ -95,42 +94,57 @@ public class FileBackedTasksManager extends InMemoryTasksManager {
     }
 
     @Override
-    public int addTask(@NotNull Task task) {
+    public int addTask(Task task) {
+        if (task == null) {
+            return 0;
+        }
         super.addTask(task);
         save();
         return task.getId();
     }
 
     @Override
-    public int addEpic(@NotNull Epic epic) {
+    public int addEpic(Epic epic) {
+        if (epic == null) {
+            return 0;
+        }
         super.addEpic(epic);
         save();
         return epic.getId();
     }
 
     @Override
-    public int addSubtask(@NotNull Subtask subtask) {
+    public int addSubtask(Subtask subtask) {
+        if (subtask == null) {
+            return 0;
+        }
         super.addSubtask(subtask);
         save();
         return subtask.getId();
     }
 
     @Override
-    public void updateTask(@NotNull Task task) {
-        super.updateTask(task);
-        save();
+    public void updateTask(Task task) {
+        if (task != null) {
+            super.updateTask(task);
+            save();
+        }
     }
 
     @Override
-    public void updateEpic(@NotNull Epic epic) {
-        super.updateEpic(epic);
-        save();
+    public void updateEpic(Epic epic) {
+        if (epic != null) {
+            super.updateEpic(epic);
+            save();
+        }
     }
 
     @Override
-    public void updateSubtask(@NotNull Subtask subtask) {
-        super.updateSubtask(subtask);
-        save();
+    public void updateSubtask(Subtask subtask) {
+        if (subtask != null) {
+            super.updateSubtask(subtask);
+            save();
+        }
     }
 
     @Override
