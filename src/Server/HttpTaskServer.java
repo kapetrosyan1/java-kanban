@@ -25,24 +25,20 @@ public class HttpTaskServer {
     private static final Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;
     private final HttpServer server;
     public final TaskManager manager;
-    private final Gson gson;
+    public static final Gson GSON = new GsonBuilder()
+            .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
+            .create();
 
     public HttpTaskServer(String URL) throws IOException {
         server = HttpServer.create(new InetSocketAddress("localhost", PORT), 0);
         server.createContext("/tasks", this::handle);
         manager = Managers.getDefault(URL);
-        gson = new GsonBuilder()
-                .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
-                .create();
     }
 
     public HttpTaskServer(TaskManager manager) throws IOException {
         server = HttpServer.create(new InetSocketAddress("localhost", PORT), 0);
         server.createContext("/tasks", this::handle);
         this.manager = manager;
-        gson = new GsonBuilder()
-                .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
-                .create();
     }
 
     public void handle(HttpExchange exchange) {
@@ -62,13 +58,13 @@ public class HttpTaskServer {
                 case "GET":
                     switch (path) {
                         case "":
-                            response = gson.toJson(manager.getPrioritizedTasks());
+                            response = GSON.toJson(manager.getPrioritizedTasks());
                             writeResponse(exchange, response, 200);
                             return;
 
                         case "task/":
                             if (query == null) {
-                                response = gson.toJson(manager.getAllTasks());
+                                response = GSON.toJson(manager.getAllTasks());
                                 writeResponse(exchange, response, 200);
                             } else if (parseTaskId(query) == -1) {
                                 response = "Запрошенный ресурс не найден";
@@ -77,7 +73,7 @@ public class HttpTaskServer {
                             } else {
                                 Task task = manager.getTaskById(parseTaskId(query));
                                 if (task != null) {
-                                    response = gson.toJson(task);
+                                    response = GSON.toJson(task);
                                     writeResponse(exchange, response, 200);
                                 } else {
                                     writeResponse(exchange, "Задача с id " + parseTaskId(query) +
@@ -88,7 +84,7 @@ public class HttpTaskServer {
 
                         case "subtask/":
                             if (query == null) {
-                                response = gson.toJson(manager.getAllSubtasks());
+                                response = GSON.toJson(manager.getAllSubtasks());
                                 writeResponse(exchange, response, 200);
                             } else if (parseTaskId(query) == -1) {
                                 response = "Запрошенный ресурс не найден";
@@ -96,7 +92,7 @@ public class HttpTaskServer {
                             } else {
                                 Subtask subtask = manager.getSubtaskById(parseTaskId(query));
                                 if (subtask != null) {
-                                    response = gson.toJson(subtask);
+                                    response = GSON.toJson(subtask);
                                     writeResponse(exchange, response, 200);
                                 } else {
                                     writeResponse(exchange, "Подзадача с id " + parseTaskId(query) +
@@ -107,7 +103,7 @@ public class HttpTaskServer {
 
                         case "epic/":
                             if (query == null) {
-                                response = gson.toJson(manager.getAllEpics());
+                                response = GSON.toJson(manager.getAllEpics());
                                 writeResponse(exchange, response, 200);
                             } else {
                                 if (parseTaskId(query) == -1) {
@@ -116,7 +112,7 @@ public class HttpTaskServer {
                                 } else {
                                     Epic epic = manager.getEpicById(parseTaskId(query));
                                     if (epic != null) {
-                                        response = gson.toJson(epic);
+                                        response = GSON.toJson(epic);
                                         writeResponse(exchange, response, 200);
                                     } else {
                                         writeResponse(exchange, "Эпик с id " + parseTaskId(query) +
@@ -137,13 +133,13 @@ public class HttpTaskServer {
                                             " не найден", 404);
                                     return;
                                 }
-                                response = gson.toJson(manager.getEpicSubtasks(parseTaskId(query)));
+                                response = GSON.toJson(manager.getEpicSubtasks(parseTaskId(query)));
                                 writeResponse(exchange, response, 200);
                             }
                             return;
 
                         case "history":
-                            response = gson.toJson(manager.getHistory());
+                            response = GSON.toJson(manager.getHistory());
                             writeResponse(exchange, response, 200);
                             return;
 
@@ -155,8 +151,7 @@ public class HttpTaskServer {
                 case "POST":
                     switch (path) {
                         case "task/":
-                            Task task = gson.fromJson(getRequestBody(exchange), Task.class);
-                            System.out.println(task.toString());
+                            Task task = GSON.fromJson(getRequestBody(exchange), Task.class);
 
                             if (task.getTitle() == null || task.getDescription() == null) {
                                 writeResponse(exchange, "Не удалось создать задачу", 400);
@@ -173,7 +168,7 @@ public class HttpTaskServer {
                             return;
 
                         case "epic/":
-                            Epic epic = gson.fromJson(getRequestBody(exchange), Epic.class);
+                            Epic epic = GSON.fromJson(getRequestBody(exchange), Epic.class);
 
                             if (epic.getTitle() == null || epic.getDescription() == null) {
                                 writeResponse(exchange, "Не удалось создать эпик", 400);
@@ -190,7 +185,7 @@ public class HttpTaskServer {
                             return;
 
                         case "subtask/":
-                            Subtask subtask = gson.fromJson(getRequestBody(exchange), Subtask.class);
+                            Subtask subtask = GSON.fromJson(getRequestBody(exchange), Subtask.class);
 
                             if (subtask.getTitle() == null || subtask.getDescription() == null) {
                                 writeResponse(exchange, "Не удалось создать подзадачу", 400);

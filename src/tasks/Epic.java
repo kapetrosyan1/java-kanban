@@ -7,7 +7,7 @@ import tasks.Enums.Status;
 import tasks.Enums.TasksTypes;
 
 public class Epic extends Task {
-    private final ArrayList<Integer> subtasksId = new ArrayList<>();
+    private ArrayList<Integer> subtasksId = new ArrayList<>();
     private LocalDateTime endTime;
 
     public Epic(String title, String description) {
@@ -15,7 +15,8 @@ public class Epic extends Task {
     }
 
     public Epic(int id, String title, Status status, String description) {
-        super(id, title, status, description);
+        super(title, status, description);
+        this.setId(id);
     }
 
     public Epic(int id, String title, String description) {
@@ -43,6 +44,10 @@ public class Epic extends Task {
 
     public void setEndTime(LocalDateTime endTime) {
         this.endTime = endTime;
+    }
+
+    public void setSubtasksId(ArrayList<Integer> subtasksId) {
+        this.subtasksId = subtasksId;
     }
 
     @Override

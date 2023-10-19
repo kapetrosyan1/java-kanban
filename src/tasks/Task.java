@@ -9,9 +9,9 @@ import java.util.Objects;
 
 public class Task {
     private int id;
-    private final String title;
+    private String title;
     private Status status;
-    private final String description;
+    private String description;
     private LocalDateTime startTime;
     private long duration;
 
@@ -42,6 +42,14 @@ public class Task {
         this.id = id;
         this.title = title;
         this.status = status;
+        this.description = description;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setDescription(String description) {
         this.description = description;
     }
 
@@ -77,6 +85,7 @@ public class Task {
     public LocalDateTime getStartTime() {
         return startTime;
     }
+
 
     public void setStartTime(LocalDateTime startTime) {
         this.startTime = startTime;

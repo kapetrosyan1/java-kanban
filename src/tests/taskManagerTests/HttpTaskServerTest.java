@@ -41,7 +41,9 @@ public class HttpTaskServerTest extends TaskManagerTest<HttpTaskManager> {
 
     @BeforeAll
     static void setUp() {
-        gson = new GsonBuilder().registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter()).create();
+        gson = new GsonBuilder()
+                .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
+                .create();
         client = HttpClient.newHttpClient();
     }
 
