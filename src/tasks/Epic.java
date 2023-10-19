@@ -7,7 +7,7 @@ import tasks.Enums.Status;
 import tasks.Enums.TasksTypes;
 
 public class Epic extends Task {
-    private ArrayList<Integer> subtasksId = new ArrayList<>();
+    private final ArrayList<Integer> subtasksId = new ArrayList<>();
     private LocalDateTime endTime;
 
     public Epic(String title, String description) {

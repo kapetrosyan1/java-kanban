@@ -33,11 +33,6 @@ public class HttpTaskServerTest extends TaskManagerTest<HttpTaskManager> {
     private HttpTaskServer httpServer;
     private static HttpClient client;
     private static Gson gson;
-    private Task task1;
-    private Task task2;
-    private Epic epic;
-    private Subtask subtask1;
-    private Subtask subtask2;
 
     @BeforeAll
     static void setUp() {
@@ -56,14 +51,6 @@ public class HttpTaskServerTest extends TaskManagerTest<HttpTaskManager> {
 
         httpServer = new HttpTaskServer(taskManager);
         httpServer.start();
-
-        task1 = new Task("test task", Status.NEW, "test task 1");
-        task2 = new Task("test task", Status.IN_PROGRESS, "test task 2",
-                LocalDateTime.of(2023, 10, 16, 10, 10), 120);
-        epic = new Epic("test epic", "test epic with 2 subs");
-        subtask1 = new Subtask("test Subtask", Status.NEW, "test subtask 1", 1);
-        subtask2 = new Subtask("test Subtask", Status.DONE, "test subtask 2",
-                LocalDateTime.of(2023, 10, 18, 14, 40), 60, 1);
     }
 
     @AfterEach
@@ -74,6 +61,7 @@ public class HttpTaskServerTest extends TaskManagerTest<HttpTaskManager> {
 
     @Test
     void addOrUpdateTask() throws IOException, InterruptedException {
+        Task task1 = new Task("test task", Status.NEW, "test task 1");
         URI uri = URI.create("http://localhost:8080/tasks/task/");
         String jsonTask = gson.toJson(task1);
 
@@ -104,6 +92,7 @@ public class HttpTaskServerTest extends TaskManagerTest<HttpTaskManager> {
 
     @Test
     void addOrUpdateEpic() throws IOException, InterruptedException {
+        Epic epic = new Epic("test epic", "test epic with 2 subs");
         URI uri = URI.create("http://localhost:8080/tasks/epic/");
         String jsonEpic = gson.toJson(epic);
 
@@ -119,7 +108,7 @@ public class HttpTaskServerTest extends TaskManagerTest<HttpTaskManager> {
         assertEquals(201, response.statusCode(), "неверный код ответа");
         assertEquals("Эпик успешно добавлен", response.body());
 
-        String jsonEpic1 = gson.toJson(new Epic(1, "test epic", "test epic with still 0 subs"));
+        String jsonEpic1 = gson.toJson(new Epic(1, "test epic", "test epic with still 2 subs"));
         HttpRequest newRequest = HttpRequest.newBuilder()
                 .uri(uri)
                 .POST(HttpRequest.BodyPublishers.ofString(jsonEpic1))
@@ -127,7 +116,7 @@ public class HttpTaskServerTest extends TaskManagerTest<HttpTaskManager> {
 
         HttpResponse<String> response1 = client.send(newRequest, HttpResponse.BodyHandlers.ofString());
 
-        List<Epic> updatedList = List.of(new Epic(1, "test epic", "test epic with still 0 subs"));
+        List<Epic> updatedList = List.of(new Epic(1, "test epic", "test epic with still 2 subs"));
 
         assertEquals(updatedList, taskManager.getAllEpics(), "Списки должны быть одинаковыми");
         assertEquals("Эпик успешно обновлен", response1.body());
@@ -136,8 +125,9 @@ public class HttpTaskServerTest extends TaskManagerTest<HttpTaskManager> {
 
     @Test
     void addOrUpdateSubtask() throws IOException, InterruptedException {
+        Epic epic = new Epic("test epic", "test epic with 2 subs");
         taskManager.addEpic(epic);
-
+        Subtask subtask1 = new Subtask("test Subtask", Status.NEW, "test subtask 1", 1);
         URI uri = URI.create("http://localhost:8080/tasks/subtask/");
         String jsonSubtask = gson.toJson(subtask1);
 
@@ -170,6 +160,13 @@ public class HttpTaskServerTest extends TaskManagerTest<HttpTaskManager> {
 
     @Test
     void getPrioritizedTasks() throws IOException, InterruptedException {
+        Task task1 = new Task("test task", Status.NEW, "test task 1");
+        Task task2 = new Task("test task", Status.IN_PROGRESS, "test task 2",
+                LocalDateTime.of(2023, 10, 16, 10, 10), 120);
+        Epic epic = new Epic("test epic", "test epic with 2 subs");
+        Subtask subtask2 = new Subtask("test Subtask", Status.DONE, "test subtask 2",
+                LocalDateTime.of(2023, 10, 18, 14, 40), 60, 1);
+
         taskManager.addTask(task2);
         taskManager.addEpic(epic);
         taskManager.addSubtask(subtask2);
@@ -197,6 +194,7 @@ public class HttpTaskServerTest extends TaskManagerTest<HttpTaskManager> {
 
     @Test
     void getTasks() throws IOException, InterruptedException {
+        Task task1 = new Task("test task", Status.NEW, "test task 1");
         taskManager.addTask(task1);
 
         URI uri = URI.create("http://localhost:8080/tasks/task/");
@@ -218,6 +216,7 @@ public class HttpTaskServerTest extends TaskManagerTest<HttpTaskManager> {
 
     @Test
     void getEpics() throws IOException, InterruptedException {
+        Epic epic = new Epic("test epic", "test epic with 2 subs");
         taskManager.addEpic(epic);
 
         URI uri = URI.create("http://localhost:8080/tasks/epic/");
@@ -239,7 +238,9 @@ public class HttpTaskServerTest extends TaskManagerTest<HttpTaskManager> {
 
     @Test
     void getSubtasks() throws IOException, InterruptedException {
+        Epic epic = new Epic("test epic", "test epic with 2 subs");
         taskManager.addEpic(epic);
+        Subtask subtask1 = new Subtask("test Subtask", Status.NEW, "test subtask 1", 1);
         taskManager.addSubtask(subtask1);
 
         URI uri = URI.create("http://localhost:8080/tasks/subtask/");
@@ -261,6 +262,7 @@ public class HttpTaskServerTest extends TaskManagerTest<HttpTaskManager> {
 
     @Test
     void getTaskById() throws IOException, InterruptedException {
+        Task task1 = new Task("test task", Status.NEW, "test task 1");
         taskManager.addTask(task1);
 
         URI uri = URI.create("http://localhost:8080/tasks/task/?id=1");
@@ -281,6 +283,7 @@ public class HttpTaskServerTest extends TaskManagerTest<HttpTaskManager> {
 
     @Test
     void getEpicById() throws IOException, InterruptedException {
+        Epic epic = new Epic("test epic", "test epic with 2 subs");
         taskManager.addEpic(epic);
 
         URI uri = URI.create("http://localhost:8080/tasks/epic/?id=1");
@@ -301,7 +304,9 @@ public class HttpTaskServerTest extends TaskManagerTest<HttpTaskManager> {
 
     @Test
     void getSubtaskById() throws IOException, InterruptedException {
+        Epic epic = new Epic("test epic", "test epic with 2 subs");
         taskManager.addEpic(epic);
+        Subtask subtask1 = new Subtask("test Subtask", Status.NEW, "test subtask 1", 1);
         taskManager.addSubtask(subtask1);
 
         URI uri = URI.create("http://localhost:8080/tasks/subtask/?id=2");
@@ -322,8 +327,12 @@ public class HttpTaskServerTest extends TaskManagerTest<HttpTaskManager> {
 
     @Test
     void getHistory() throws IOException, InterruptedException {
+        Task task1 = new Task("test task", Status.NEW, "test task 1");
+        Task task2 = new Task("test task", Status.IN_PROGRESS, "test task 2",
+                LocalDateTime.of(2023, 10, 16, 10, 10), 120);
         taskManager.addTask(task1);
         taskManager.addTask(task2);
+        Epic epic = new Epic("test epic", "test epic with 2 subs");
         taskManager.addEpic(epic);
 
         taskManager.getEpicById(3);
@@ -349,6 +358,9 @@ public class HttpTaskServerTest extends TaskManagerTest<HttpTaskManager> {
 
     @Test
     void deleteTaskById() throws IOException, InterruptedException {
+        Task task1 = new Task("test task", Status.NEW, "test task 1");
+        Task task2 = new Task("test task", Status.IN_PROGRESS, "test task 2",
+                LocalDateTime.of(2023, 10, 16, 10, 10), 120);
         taskManager.addTask(task1);
         taskManager.addTask(task2);
 
@@ -375,6 +387,7 @@ public class HttpTaskServerTest extends TaskManagerTest<HttpTaskManager> {
 
     @Test
     void deleteEpicById() throws IOException, InterruptedException {
+        Epic epic = new Epic("test epic", "test epic with 2 subs");
         taskManager.addEpic(epic);
         taskManager.addEpic(new Epic("delete epic", "delete epic"));
 
@@ -396,7 +409,11 @@ public class HttpTaskServerTest extends TaskManagerTest<HttpTaskManager> {
 
     @Test
     void deleteSubtaskById() throws IOException, InterruptedException {
+        Epic epic = new Epic("test epic", "test epic with 2 subs");
         taskManager.addEpic(epic);
+        Subtask subtask1 = new Subtask("test Subtask", Status.NEW, "test subtask 1", 1);
+        Subtask subtask2 = new Subtask("test Subtask", Status.DONE, "test subtask 2",
+                LocalDateTime.of(2023, 10, 18, 14, 40), 60, 1);
         taskManager.addSubtask(subtask1);
         taskManager.addSubtask(subtask2);
 
@@ -416,6 +433,9 @@ public class HttpTaskServerTest extends TaskManagerTest<HttpTaskManager> {
 
     @Test
     void clearAllTasks() throws IOException, InterruptedException {
+        Task task1 = new Task("test task", Status.NEW, "test task 1");
+        Task task2 = new Task("test task", Status.IN_PROGRESS, "test task 2",
+                LocalDateTime.of(2023, 10, 16, 10, 10), 120);
         taskManager.addTask(task1);
         taskManager.addTask(task2);
 
@@ -435,6 +455,7 @@ public class HttpTaskServerTest extends TaskManagerTest<HttpTaskManager> {
 
     @Test
     void clearAllEpics() throws IOException, InterruptedException {
+        Epic epic = new Epic("test epic", "test epic with 2 subs");
         taskManager.addEpic(epic);
         taskManager.addEpic(new Epic("delete Epic", "delete epic descr"));
 
@@ -454,7 +475,11 @@ public class HttpTaskServerTest extends TaskManagerTest<HttpTaskManager> {
 
     @Test
     void clearAllSubtasks() throws IOException, InterruptedException {
+        Epic epic = new Epic("test epic", "test epic with 2 subs");
         taskManager.addEpic(epic);
+        Subtask subtask1 = new Subtask("test Subtask", Status.NEW, "test subtask 1", 1);
+        Subtask subtask2 = new Subtask("test Subtask", Status.DONE, "test subtask 2",
+                LocalDateTime.of(2023, 10, 18, 14, 40), 60, 1);
         taskManager.addSubtask(subtask1);
         taskManager.addSubtask(subtask2);
 
@@ -473,7 +498,12 @@ public class HttpTaskServerTest extends TaskManagerTest<HttpTaskManager> {
     }
 
     @Test
-    void getsubtaskEpiclist() throws IOException, InterruptedException {
+    void getSubtaskEpicList() throws IOException, InterruptedException {
+        Epic epic = new Epic("test epic", "test epic with 2 subs");
+        Subtask subtask1 = new Subtask("test Subtask", Status.NEW, "test subtask 1", 1);
+        Subtask subtask2 = new Subtask("test Subtask", Status.DONE, "test subtask 2",
+                LocalDateTime.of(2023, 10, 18, 14, 40), 60, 1);
+
         taskManager.addEpic(epic);
         taskManager.addSubtask(subtask1);
         taskManager.addSubtask(subtask2);

@@ -6,7 +6,7 @@ import tasks.Enums.TasksTypes;
 import java.time.LocalDateTime;
 
 public class Subtask extends Task {
-    private int epicId;
+    private final int epicId;
 
     public Subtask(String title, Status status, String description, int epicId) {
         super(title, status, description);

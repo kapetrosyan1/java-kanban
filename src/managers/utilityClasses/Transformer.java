@@ -79,7 +79,7 @@ public class Transformer {
             }
 
             if (type.equals(TasksTypes.TASK)) {
-                return new Task(id, title, status, description,startTime,duration);
+                return new Task(id, title, status, description, startTime, duration);
             } else if (type.equals(TasksTypes.EPIC)) {
                 return new Epic(id, title, status, description);
             } else if (type.equals(TasksTypes.SUBTASK)) {
