@@ -187,9 +187,9 @@ public class InMemoryTasksManager implements TaskManager {
         if (subtasks.containsKey(taskId)) {
             historyManager.remove(taskId);
             int epicId = subtasks.get(taskId).getEpicId();
+            prioritizedTasks.remove(subtasks.get(taskId));
             subtasks.remove(taskId);
             epics.get(epicId).removeSubtaskId(taskId);
-            prioritizedTasks.remove(subtasks.get(taskId));
             updateEpic(epics.get(epicId));
         }
     }

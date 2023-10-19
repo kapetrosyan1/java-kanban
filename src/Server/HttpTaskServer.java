@@ -185,9 +185,10 @@ public class HttpTaskServer {
                             return;
 
                         case "subtask/":
+
                             Subtask subtask = GSON.fromJson(getRequestBody(exchange), Subtask.class);
 
-                            if (subtask.getTitle() == null || subtask.getDescription() == null) {
+                            if (subtask.getTitle() == null || subtask.getDescription() == null || subtask.getEpicId() == 0) {
                                 writeResponse(exchange, "Не удалось создать подзадачу", 400);
                                 return;
                             }

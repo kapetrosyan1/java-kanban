@@ -61,9 +61,9 @@ public class HttpTaskServerTest extends TaskManagerTest<HttpTaskManager> {
         task2 = new Task("test task", Status.IN_PROGRESS, "test task 2",
                 LocalDateTime.of(2023, 10, 16, 10, 10), 120);
         epic = new Epic("test epic", "test epic with 2 subs");
-        subtask1 = new Subtask("test Subtask", Status.NEW, "test subtask 1", epic.getId());
+        subtask1 = new Subtask("test Subtask", Status.NEW, "test subtask 1", 1);
         subtask2 = new Subtask("test Subtask", Status.DONE, "test subtask 2",
-                LocalDateTime.of(2023, 10, 18, 14, 40), 60, epic.getId());
+                LocalDateTime.of(2023, 10, 18, 14, 40), 60, 1);
     }
 
     @AfterEach
@@ -338,13 +338,15 @@ public class HttpTaskServerTest extends TaskManagerTest<HttpTaskManager> {
                 .build();
 
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        List<Task> historyList = gson.fromJson(response.body(), new TypeToken<ArrayList<Task>>(){}.getType());
+        List<Task> historyList = gson.fromJson(response.body(), new TypeToken<ArrayList<Task>>() {
+        }.getType());
 
         assertEquals(3, historyList.get(0).getId(), "Элементы не совпадают");
         assertEquals(1, historyList.get(1).getId(), "Элементы не совпадают");
         assertEquals(2, historyList.get(2).getId(), "Элементы не совпадают");
         assertEquals(200, response.statusCode(), "Неверный код ответа");
     }
+
     @Test
     void deleteTaskById() throws IOException, InterruptedException {
         taskManager.addTask(task1);
@@ -392,24 +394,44 @@ public class HttpTaskServerTest extends TaskManagerTest<HttpTaskManager> {
         assertEquals(sampleList, taskManager.getAllEpics(), "Списки не совпадают");
     }
 
-   @Test
-   void clearAllTasks() throws IOException, InterruptedException {
+    @Test
+    void deleteSubtaskById() throws IOException, InterruptedException {
+        taskManager.addEpic(epic);
+        taskManager.addSubtask(subtask1);
+        taskManager.addSubtask(subtask2);
+
+        URI uri = URI.create("http://localhost:8080/tasks/subtask/?id=3");
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(uri)
+                .DELETE()
+                .build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        List<Subtask> sampleList = List.of(new Subtask(2, "test Subtask", Status.NEW, "test subtask 1", 1));
+        assertEquals(200, response.statusCode(), "Неверный код ответа");
+        assertEquals("Подзадача с id 3 успешно удалена", response.body(), "Неверный ответ сервера");
+        assertEquals(sampleList, taskManager.getAllSubtasks(), "Списки не совпадают");
+    }
+
+    @Test
+    void clearAllTasks() throws IOException, InterruptedException {
         taskManager.addTask(task1);
         taskManager.addTask(task2);
 
-       URI uri = URI.create("http://localhost:8080/tasks/task/");
+        URI uri = URI.create("http://localhost:8080/tasks/task/");
 
-       HttpRequest request = HttpRequest.newBuilder()
-               .uri(uri)
-               .DELETE()
-               .build();
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(uri)
+                .DELETE()
+                .build();
 
-       HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-       assertEquals(200, response.statusCode(), "Неверный код ответа");
-       assertEquals("Задачи успешно удалены", response.body(), "Неверный ответ сервера");
-       assertEquals(0, taskManager.getAllTasks().size(), "Список не пуст");
-   }
+        assertEquals(200, response.statusCode(), "Неверный код ответа");
+        assertEquals("Задачи успешно удалены", response.body(), "Неверный ответ сервера");
+        assertEquals(0, taskManager.getAllTasks().size(), "Список не пуст");
+    }
 
     @Test
     void clearAllEpics() throws IOException, InterruptedException {
@@ -448,5 +470,28 @@ public class HttpTaskServerTest extends TaskManagerTest<HttpTaskManager> {
         assertEquals(200, response.statusCode(), "Неверный код ответа");
         assertEquals("Подзадачи успешно удалены", response.body(), "Неверный ответ сервера");
         assertEquals(0, taskManager.getAllSubtasks().size(), "Список не пуст");
+    }
+
+    @Test
+    void getsubtaskEpiclist() throws IOException, InterruptedException {
+        taskManager.addEpic(epic);
+        taskManager.addSubtask(subtask1);
+        taskManager.addSubtask(subtask2);
+
+        URI uri = URI.create("http://localhost:8080/tasks/subtask/epic/?id=1");
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(uri)
+                .GET()
+                .build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        List<Subtask> respList = gson.fromJson(response.body(), new TypeToken<ArrayList<Subtask>>() {
+        }.getType());
+        List<Subtask> sampleList = List.of(taskManager.getSubtaskById(2), taskManager.getSubtaskById(3));
+
+        assertEquals(200, response.statusCode(), "Неверный код ответа");
+        assertEquals(2, taskManager.getEpicSubtasks(1).size(), "Список неправильный");
+        assertEquals(sampleList, respList, "Списки должны быть одинаковыми");
     }
 }
